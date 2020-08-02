@@ -1,4 +1,92 @@
-.title {
-    color: blue;
-    margin: 20px;
+.appContainer {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.headerContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #111;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 25%;
+    padding-right: 25%;
+}
+
+.headerTitle {
+    color: #fff;
+    font-size: 1.6rem;
+}
+
+.navigation {
+    flex-direction: row;
+}
+
+.navigationLink {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.navigationLink:hover {
+    text-decoration: underline;
+}
+
+.navigationLinkMarginLeft {
+    margin-left: 3rem;
+}
+
+.navigationLinkActive {
+    color: #f00;
+}
+
+@media (max-width: 1500px) {
+    .appContainer {
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+    .headerContainer {
+        padding-left: 20%;
+        padding-right: 20%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .appContainer {
+        margin-left: 15%;
+        margin-right: 15%;
+    }
+    .headerContainer {
+        padding-left: 15%;
+        padding-right: 15%;
+    }
+}
+
+@media (max-width: 900px) {
+    .appContainer {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+    .headerContainer {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+}
+
+@media (max-width: 600px) {
+    .appContainer {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    .headerContainer {
+        flex-direction: column;
+        justify-content: center;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .navigation {
+        margin-top: 0.6rem;
+    }
 }
