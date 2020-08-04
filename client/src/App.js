@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
-import Home from './pages/Home';
-import Projects from './pages/Projects';
+import HomePage from './pages/HomePage';
+import ProjectsPage from './pages/ProjectsPage';
 
 const App = () => {
     return (
@@ -11,8 +11,8 @@ const App = () => {
             <div>
                 <Header />
                 <div className="appContainer">
-                    <Route exact path="/" component={Home} />
-                    <Route path="/projects" component={Projects} />
+                    <Route exact path="/" component={HomePage} />
+                    <Route path="/projects" component={ProjectsPage} />
                 </div>
             </div>
         </BrowserRouter>
