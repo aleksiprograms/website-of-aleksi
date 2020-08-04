@@ -42,6 +42,60 @@
     color: #f00;
 }
 
+.pageTitle {
+    color: #000;
+    font-size: 2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.projectTop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.projectTitle {
+    color: #000;
+    font-size: 1.3rem;
+    margin-right: 0.6rem;
+}
+
+.link {
+    color: #f00;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.projectContent {
+    overflow: auto;
+}
+
+.image {
+    float: left;
+    margin-right: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.imageLandscape {
+    width: 70%;
+}
+
+.imagePortrait {
+    width: 30%;
+}
+
+.mainText {
+    color: #000;
+    font-size: 1rem;
+}
+
 @media (max-width: 1500px) {
     .appContainer {
         margin-left: 20%;
@@ -62,6 +116,9 @@
         padding-left: 15%;
         padding-right: 15%;
     }
+    .imagePortrait {
+        width: 30%;
+    }
 }
 
 @media (max-width: 900px) {
@@ -72,6 +129,12 @@
     .headerContainer {
         padding-left: 10%;
         padding-right: 10%;
+    }
+    .imageLandscape {
+        width: 100%;
+    }
+    .imagePortrait {
+        width: 45%;
     }
 }
 
