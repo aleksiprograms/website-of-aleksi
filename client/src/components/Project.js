@@ -3,7 +3,6 @@ import '../App.css';
 
 const Project = ({ title, text, link, imageLink, imageOrientation }) => {
     const renderImage = () => {
-        console.log("imageOrientation = " + imageOrientation);
         switch (imageOrientation) {
             case "landscape":
                 return (

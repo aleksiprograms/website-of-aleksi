@@ -5,6 +5,7 @@ const Projects = ({ projects }) => {
     return (
         projects.map((project) => (
             <Project
+                key={project.id}
                 title={project.title}
                 text={project.text}
                 link={project.link}
