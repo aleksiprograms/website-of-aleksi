@@ -8,8 +8,8 @@ const Projects = ({ projects }) => {
                 key={project.id}
                 title={project.title}
                 text={project.text}
-                link={project.link}
-                imageLink={project.imageLink}
+                githubUrl={project.githubUrl}
+                imageUrl={project.imageUrl}
                 imageOrientation={project.imageOrientation}
             />
         ))

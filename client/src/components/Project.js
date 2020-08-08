@@ -1,16 +1,16 @@
 import React from 'react';
 import '../App.css';
 
-const Project = ({ title, text, link, imageLink, imageOrientation }) => {
+const Project = ({ title, text, githubUrl, imageUrl, imageOrientation }) => {
     const renderImage = () => {
         switch (imageOrientation) {
             case "landscape":
                 return (
-                    <img className="image imageLandscape" src={imageLink} alt="new" />
+                    <img className="image imageLandscape" src={imageUrl} alt="new" />
                 );
             case "portrait":
                 return (
-                    <img className="image imagePortrait" src={imageLink} alt="new" />
+                    <img className="image imagePortrait" src={imageUrl} alt="new" />
                 );
             case "none":
                 return (null);
@@ -23,7 +23,7 @@ const Project = ({ title, text, link, imageLink, imageOrientation }) => {
         <div>
             <div className="projectTop">
                 <h3 className="projectTitle">{title}</h3>
-                <a className="link" href={link} target="_blank">Github</a>
+                <a className="link" href={githubUrl} target="_blank">Github</a>
             </div>
             <div className="projectContent">
                 {renderImage()}
