@@ -63,6 +63,57 @@
     align-self: center;
 }
 
+.homeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.homeTextContainer {
+    display: table;
+    margin-bottom: 1rem;
+}
+
+.homeTitle {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.homeText {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+.imageHome {
+    width: 80%;
+    margin-bottom: 1rem;
+    border-radius: 0.8rem;
+}
+
+.button {
+    color: #fff;
+    background-color: #111;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.7rem 1.4rem;
+    border: 0.23rem solid #f00;
+    border-radius: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.button:hover {
+    color: #000;
+    border: 0.23rem solid #000;
+    background-color: #f00;
+}
+
 .pageTitle {
     color: #000;
     font-size: 2rem;
@@ -130,6 +181,9 @@
         padding-left: 20%;
         padding-right: 20%;
     }
+    .imageHome {
+        width: 80%;
+    }
 }
 
 @media (max-width: 1200px) {
@@ -140,6 +194,9 @@
     .headerContainer {
         padding-left: 15%;
         padding-right: 15%;
+    }
+    .imageHome {
+        width: 90%;
     }
     .imagePortrait {
         width: 30%;
@@ -154,6 +211,12 @@
     .headerContainer {
         padding-left: 10%;
         padding-right: 10%;
+    }
+    .homeContainer {
+        flex-direction: column;
+    }
+    .imageHome {
+        width: 95%;
     }
     .imageLandscape {
         width: 100%;
@@ -171,10 +234,14 @@
     .headerContainer {
         flex-direction: column;
         justify-content: center;
+        height: 5rem;
         padding-left: 1rem;
         padding-right: 1rem;
     }
     .navigation {
         margin-top: 0.6rem;
+    }
+    .imageHome {
+        width: 100%;
     }
 }
