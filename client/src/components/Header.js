@@ -1,11 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../App.css';
 import Navigation from './Navigation';
 
 const Header = () => {
     return (
         <div className="headerContainer">
-            <h1 className="headerTitle">Website of Aleksi</h1>
+            <Link
+                className="headerTitle"
+                to="/"
+            >Website of Aleksi</Link>
             <Navigation />
         </div>
     );
