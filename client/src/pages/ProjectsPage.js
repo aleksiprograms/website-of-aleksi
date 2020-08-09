@@ -18,13 +18,10 @@ const ProjectsPage = () => {
         <div>
             <h2 className="pageTitle">Projects</h2>
             <p className="mainText">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Quisque fringilla lacus non tellus ultricies varius sit amet
-                eget <a className="link" href="https://github.com/aleksiprograms" target="_blank">Github profile</a> nulla.
-                Vestibulum ante ipsum primis in faucibus orci luctus
-                et ultrices posuere cubilia curae; Vivamus in odio id libero
-                ornare imperdiet eget non neque. Sed semper felis neque,
-                molestie aliquam tortor condimentum.
+                Here are descriptions of my most interesting personal projects,
+                their Github links and what technologies I use in them.
+                You can check my <a className="link" href="https://github.com/aleksiprograms" target="_blank">Github profile</a> to
+                see rest of my projects.
             </p>
             <Projects projects={projects} />
             <div className="projectsBottomMargin" />

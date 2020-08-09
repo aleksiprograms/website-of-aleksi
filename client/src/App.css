@@ -139,6 +139,10 @@
     margin-right: 0.6rem;
 }
 
+.projectTechnologies {
+    margin-bottom: 0.3rem;
+}
+
 .projectsBottomMargin {
     margin-bottom: 1rem;
 }
@@ -161,6 +165,7 @@
     float: left;
     margin-right: 0.8rem;
     margin-bottom: 0.8rem;
+    border-radius: 0.8rem;
 }
 
 .projectImageLandscape {
