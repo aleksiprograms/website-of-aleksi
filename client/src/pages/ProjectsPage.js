@@ -27,7 +27,7 @@ const ProjectsPage = () => {
                 molestie aliquam tortor condimentum.
             </p>
             <Projects projects={projects} />
-            <div className="projectsBottom" />
+            <div className="projectsBottomMargin" />
         </div>
     );
 };

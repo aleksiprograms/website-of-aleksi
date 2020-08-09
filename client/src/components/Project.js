@@ -6,11 +6,11 @@ const Project = ({ title, text, githubUrl, imageUrl, imageOrientation }) => {
         switch (imageOrientation) {
             case "landscape":
                 return (
-                    <img className="image imageLandscape" src={imageUrl} alt="new" />
+                    <img className="projectImage projectImageLandscape" src={imageUrl} />
                 );
             case "portrait":
                 return (
-                    <img className="image imagePortrait" src={imageUrl} alt="new" />
+                    <img className="projectImage projectImagePortrait" src={imageUrl} />
                 );
             case "none":
                 return (null);

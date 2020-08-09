@@ -16,7 +16,8 @@
     align-items: center;
     justify-content: space-between;
     background-color: #111;
-    height: 4rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     padding-left: 25%;
     padding-right: 25%;
 }
@@ -55,7 +56,8 @@
     display: flex;
     align-content: center;
     justify-content: center;
-    height: 2.5rem;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
     background-color: #111;
 }
 
@@ -93,7 +95,7 @@
     font-size: 1.3rem;
 }
 
-.imageHome {
+.homeImage {
     width: 80%;
     margin-bottom: 1rem;
     border-radius: 0.8rem;
@@ -137,7 +139,7 @@
     margin-right: 0.6rem;
 }
 
-.projectsBottom {
+.projectsBottomMargin {
     margin-bottom: 1rem;
 }
 
@@ -155,17 +157,17 @@
     overflow: auto;
 }
 
-.image {
+.projectImage {
     float: left;
     margin-right: 0.8rem;
     margin-bottom: 0.8rem;
 }
 
-.imageLandscape {
+.projectImageLandscape {
     width: 70%;
 }
 
-.imagePortrait {
+.projectImagePortrait {
     width: 30%;
 }
 
@@ -183,7 +185,7 @@
         padding-left: 20%;
         padding-right: 20%;
     }
-    .imageHome {
+    .homeImage {
         width: 80%;
     }
 }
@@ -197,11 +199,8 @@
         padding-left: 15%;
         padding-right: 15%;
     }
-    .imageHome {
+    .homeImage {
         width: 90%;
-    }
-    .imagePortrait {
-        width: 30%;
     }
 }
 
@@ -217,13 +216,13 @@
     .homeContainer {
         flex-direction: column;
     }
-    .imageHome {
+    .homeImage {
         width: 95%;
     }
-    .imageLandscape {
+    .projectImageLandscape {
         width: 100%;
     }
-    .imagePortrait {
+    .projectImagePortrait {
         width: 45%;
     }
 }
@@ -236,14 +235,13 @@
     .headerContainer {
         flex-direction: column;
         justify-content: center;
-        height: 5rem;
         padding-left: 1rem;
         padding-right: 1rem;
     }
     .navigation {
         margin-top: 0.6rem;
     }
-    .imageHome {
+    .homeImage {
         width: 100%;
     }
 }

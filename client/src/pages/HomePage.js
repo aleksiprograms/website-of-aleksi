@@ -18,7 +18,7 @@ const HomePage = () => {
                 to="/projects"
             >PROJECTS</Link>
             <img
-                className="imageHome"
+                className="homeImage"
                 src="https://dl.dropboxusercontent.com/s/q2mf0ugw4ohzrlm/battleagainstshapesart.png?dl=0"
             />
         </div>
