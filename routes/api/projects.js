@@ -4,7 +4,7 @@ projects = [
     {
         id: 1,
         title: "Website of Aleksi",
-        text: "The site you are right now is this project. This is my personal website to show my projects. At the moment there is only frontend and backend, where all the data is saved in the code. The plan in the future is to use a PostgreSQL database and make an admin page, where I can modify projects.",
+        text: "The site you are in right now is this project. This is my personal website to show my projects. At the moment all the data is saved in the backend code. The plan in the future is to use a PostgreSQL database and make an admin page, where I can modify projects.",
         technologies: "React, Node.js, Express, JavaScript",
         githubUrl: "https://github.com/aleksiprograms/website-of-aleksi",
         imageOrientation: "none"
