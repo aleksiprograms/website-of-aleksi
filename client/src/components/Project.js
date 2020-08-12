@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 
-const Project = ({ title, text, technologies, githubUrl, imageUrl, imageOrientation }) => {
+const Project = ({ title, text, platform, technologies, githubUrl, imageUrl, imageOrientation }) => {
     const renderImage = () => {
         switch (imageOrientation) {
             case "landscape":
@@ -25,7 +25,11 @@ const Project = ({ title, text, technologies, githubUrl, imageUrl, imageOrientat
                 <h3 className="projectTitle">{title}</h3>
                 <a className="link" href={githubUrl} target="_blank">Github</a>
             </div>
-            <div className="projectTechnologies">
+            <div className="projectListInfo">
+                <strong>Platform: </strong>
+                <em>{platform}</em>
+            </div>
+            <div className="projectListInfo">
                 <strong>Technologies: </strong>
                 <em>{technologies}</em>
             </div>
