@@ -20,6 +20,7 @@ const HomePage = () => {
             <img
                 className="homeImage"
                 src="https://dl.dropboxusercontent.com/s/q2mf0ugw4ohzrlm/battleagainstshapesart.png?dl=0"
+                alt="Home page art"
             />
         </div>
     );

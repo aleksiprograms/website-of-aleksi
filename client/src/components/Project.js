@@ -6,11 +6,19 @@ const Project = ({ title, text, platform, technologies, githubUrl, imageUrl, ima
         switch (imageOrientation) {
             case "landscape":
                 return (
-                    <img className="projectImage projectImageLandscape" src={imageUrl} />
+                    <img
+                        className="projectImage projectImageLandscape"
+                        src={imageUrl}
+                        alt="Screenshot from project"
+                    />
                 );
             case "portrait":
                 return (
-                    <img className="projectImage projectImagePortrait" src={imageUrl} />
+                    <img
+                        className="projectImage projectImagePortrait"
+                        src={imageUrl}
+                        alt="Screenshot from project"
+                    />
                 );
             case "none":
                 return (null);
