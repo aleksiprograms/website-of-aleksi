@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const { Client } = require('pg');
 
-// Database creation
+// Table of database creation
 /*
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,

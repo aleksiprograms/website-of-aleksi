@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { Client } = require('pg');
 
-// Database creation
+// Table of database creation
 /*
 CREATE TABLE projects (
     id SERIAL PRIMARY KEY,
