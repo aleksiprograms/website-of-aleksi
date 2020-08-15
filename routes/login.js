@@ -3,6 +3,15 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const { Client } = require('pg');
 
+// Database creation
+/*
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+*/
+
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }

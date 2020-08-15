@@ -1,6 +1,21 @@
 const router = require('express').Router();
 const { Client } = require('pg');
 
+// Database creation
+/*
+CREATE TABLE projects (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    text VARCHAR(3000) NOT NULL,
+    platforms VARCHAR(255) NOT NULL,
+    technologies VARCHAR(255) NOT NULL,
+    githuburl VARCHAR(255) NOT NULL,
+    imageurl VARCHAR(255),
+    imageorientation VARCHAR(255),
+    placeinprojects INTEGER NOT NULL
+);
+*/
+
 projectsOld = [
     {
         id: 1,
