@@ -26,7 +26,7 @@ const Project = ({ title, text, platform, technologies, githubUrl, imageUrl, ima
                 <a className="link" href={githubUrl} target="_blank">Github</a>
             </div>
             <div className="projectListInfo">
-                <strong>Platform: </strong>
+                <strong>Platforms: </strong>
                 <em>{platform}</em>
             </div>
             <div className="projectListInfo">
