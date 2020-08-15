@@ -181,6 +181,11 @@
     font-size: 1rem;
 }
 
+.error {
+    color: red;
+    font-size: 1.3rem;
+}
+
 @media (max-width: 1500px) {
     .appContainer {
         margin-left: 20%;
