@@ -3,7 +3,6 @@ const cors = require('cors');
 const path = require('path');
 
 const projects = require('./routes/api/projects');
-const admin = require('./routes/admin');
 const login = require('./routes/login');
 const { request, response } = require('express');
 
@@ -24,7 +23,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use('/api/projects', projects);
-app.use('/admin', admin);
 app.use('/login', login);
 
 if (process.env.NODE_ENV === 'production') {

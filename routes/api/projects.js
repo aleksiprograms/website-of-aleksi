@@ -1,6 +1,7 @@
 const router = require('express').Router();
+const { Client } = require('pg');
 
-projects = [
+projectsOld = [
     {
         id: 1,
         title: "Website of Aleksi",
@@ -52,7 +53,33 @@ projects = [
     },
 ];
 
-router.get('/', (request, response) => {
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
+const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
+client.connect();
+
+router.get('/', async (request, response) => {
+    let res = await client.query('SELECT * FROM projects ORDER BY placeinprojects ASC');
+    let projects = [];
+    for (let row of res.rows) {
+        projects.push({
+            id: row.id,
+            title: row.title,
+            text: row.text,
+            platform: row.platform,
+            technologies: row.technologies,
+            githubUrl: row.githuburl,
+            imageUrl: row.imageurl,
+            imageOrientation: row.imageorientation
+        });
+    }
     response.json(projects);
 });
 
