@@ -18,6 +18,16 @@ app.use('/admin', admin);
 app.use('/login', login);
 
 if (process.env.NODE_ENV === 'production') {
+    app.use((request, response, next) => {
+        if (request.header('x-forwarded-proto') !== 'https') {
+            response.redirect(`https://${request.header('host')}${request.url}`);
+        } else {
+            next();
+        }
+    });
+}
+
+if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
     app.get('*', (request, response) => {
         response.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
