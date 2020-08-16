@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
-import Notification from '../components/Notification';
-import LoginForm from '../components/LoginForm';
-import Admin from '../components/Admin';
+import LoginForm from '../components/admin/LoginForm';
+import AdminDashboard from '../components/admin/AdminDashboard';
+import ErrorMessage from '../components/admin/ErrorMessage';
 
 const AdminPage = () => {
     const [user, setUser] = useState(null);
@@ -47,7 +47,7 @@ const AdminPage = () => {
 
     return (
         <div>
-            <Notification message={errorMessage} />
+            <ErrorMessage message={errorMessage} />
             {user === null ?
                 <LoginForm
                     username={username}
@@ -56,7 +56,7 @@ const AdminPage = () => {
                     onPasswordChange={({ target }) => setPassword(target.value)}
                     login={login}
                 /> :
-                <Admin logout={logout} />
+                <AdminDashboard logout={logout} />
             }
         </div>
     );

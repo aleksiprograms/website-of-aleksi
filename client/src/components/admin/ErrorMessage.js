@@ -1,7 +1,7 @@
 import React from 'react';
-import '../App.css';
+import '../../App.css';
 
-const Notification = ({ message }) => {
+const ErrorMessage = ({ message }) => {
     if (message === null) {
         return null;
     }
@@ -13,4 +13,4 @@ const Notification = ({ message }) => {
     );
 }
 
-export default Notification;
+export default ErrorMessage;
