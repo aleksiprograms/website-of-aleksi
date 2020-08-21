@@ -1,5 +1,10 @@
 import React from 'react';
-import '../../App.css';
+import styled from 'styled-components';
+
+const Error = styled.div`
+    color: #f00;
+    font-size: 1.3rem;
+`;
 
 const ErrorMessage = ({ message }) => {
     if (message === null) {
@@ -7,9 +12,9 @@ const ErrorMessage = ({ message }) => {
     }
 
     return (
-        <div className="error">
+        <Error>
             {message}
-        </div>
+        </Error>
     );
 }
 

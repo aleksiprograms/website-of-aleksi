@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../../App.css';
 import ErrorMessage from './ErrorMessage';
 
 const LoginForm = ({ setUser }) => {
@@ -13,7 +12,7 @@ const LoginForm = ({ setUser }) => {
         try {
             const user = await axios.post(
                 '/login',
-                {username: username, password: password});
+                { username: username, password: password });
             window.localStorage.setItem(
                 'loggedUser', JSON.stringify(user)
             );
