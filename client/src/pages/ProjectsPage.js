@@ -20,7 +20,7 @@ const Link = styled.a`
     text-decoration: none;
     font-size: 1rem;
 
-    &.hover {
+    &:hover {
         text-decoration: underline;
     }
 `;

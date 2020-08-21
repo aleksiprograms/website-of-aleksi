@@ -59,7 +59,7 @@ const Button = styled(Link)`
     border-radius: 0.8rem;
     margin-bottom: 1rem;
 
-    &.hover {
+    &:hover {
         color: #000;
         border: 0.23rem solid #000;
         background-color: #f00;
