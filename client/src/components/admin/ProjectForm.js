@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../../App.css';
 
-const ProjectForm = () => {
+const ProjectForm = ({ hideForm }) => {
     const [project, setProject] = useState({
         title: '',
         text: '',
@@ -13,9 +13,14 @@ const ProjectForm = () => {
         placeInProjects: ''
     });
 
+    const submit = (event) => {
+        event.preventDefault();
+        hideForm();
+    }
+
     return (
         <div>
-            <form onSubmit={() => console.log("PROJECT SUBMITED")}>
+            <form onSubmit={submit}>
                 <div>
                     <span>Title</span>
                     <input
@@ -30,7 +35,9 @@ const ProjectForm = () => {
                 </div>
                 <div>
                     <span>Text</span>
-                    <input
+                    <textarea
+                        rows="4"
+                        cols="50"
                         type="text"
                         value={project.text}
                         onChange={({ target }) => {
@@ -112,6 +119,7 @@ const ProjectForm = () => {
                         }}
                     />
                 </div>
+                <button onClick={hideForm}>CANCEL</button>
                 <button type="submit">SAVE</button>
             </form>
         </div>

@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import '../../App.css';
+import ErrorMessage from './ErrorMessage';
 
-const LoginForm = ({ login, onUsernameChange, onPasswordChange, username, password }) => {
+const LoginForm = ({ setUser }) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const login = async (event) => {
+        event.preventDefault();
+        try {
+            const user = await axios.post(
+                '/login',
+                {username: username, password: password});
+            window.localStorage.setItem(
+                'loggedUser', JSON.stringify(user)
+            );
+            setUser(user);
+            setUsername('');
+            setPassword('');
+            setErrorMessage('');
+        } catch (exception) {
+            setErrorMessage('Invalid username or password');
+        }
+    }
+
     return (
         <div>
+            <ErrorMessage message={errorMessage} />
             <h3>ADMIN LOGIN</h3>
             <form onSubmit={login}>
                 <div>
@@ -11,7 +36,7 @@ const LoginForm = ({ login, onUsernameChange, onPasswordChange, username, passwo
                     <input
                         type="text"
                         value={username}
-                        onChange={onUsernameChange}
+                        onChange={({ target }) => setUsername(target.value)}
                     />
                 </div>
                 <div>
@@ -19,7 +44,7 @@ const LoginForm = ({ login, onUsernameChange, onPasswordChange, username, passwo
                     <input
                         type="password"
                         value={password}
-                        onChange={onPasswordChange}
+                        onChange={({ target }) => setPassword(target.value)}
                     />
                 </div>
                 <button type="submit">LOG IN</button>
