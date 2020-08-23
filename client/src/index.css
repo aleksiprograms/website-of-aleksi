@@ -8,3 +8,9 @@ body {
     font-size: 100%;
     background-color: #eee;
 }
+
+input, textarea {  
+    font-family: Arial, sans-serif;
+    font-size: 100%;
+    width: 100%;
+}

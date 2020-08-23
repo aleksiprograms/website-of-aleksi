@@ -1,7 +1,7 @@
 import React from 'react';
 import Project from './Project';
 
-const Projects = ({ projects }) => {
+const AllProjects = ({ projects }) => {
     return (
         projects.map((project) => (
             <Project
@@ -18,4 +18,4 @@ const Projects = ({ projects }) => {
     );
 };
 
-export default Projects;
+export default AllProjects;

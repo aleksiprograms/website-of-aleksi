@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import projectService from '../services/projects';
 import LoginForm from '../components/admin/LoginForm';
 import AdminDashboard from '../components/admin/AdminDashboard';
 
@@ -9,15 +10,24 @@ const AdminPage = () => {
         const loggedUserJSON = window.localStorage.getItem('loggedUser');
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON);
-            setUser(user);
+            setUpUser(user);
         }
     }, []);
+
+    const setUpUser = (user) => {
+        setUser(user);
+        if (user === null) {
+            projectService.setToken(null);
+        } else {
+            projectService.setToken(user.token);
+        }
+    }
 
     return (
         <div>
             {user === null ?
-                <LoginForm setUser={setUser} /> :
-                <AdminDashboard setUser={setUser} />
+                <LoginForm setUpUser={setUpUser} /> :
+                <AdminDashboard user={user} setUpUser={setUpUser} />
             }
         </div>
     );

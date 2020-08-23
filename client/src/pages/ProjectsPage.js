@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import Projects from '../components/Projects';
+import AllProjects from '../components/AllProjects';
 
 const Title = styled.h2`
     color: #000;
@@ -49,7 +49,7 @@ const ProjectsPage = () => {
                 You can check my <Link className="link" href="https://github.com/aleksiprograms" target="_blank">Github profile</Link> to
                 see rest of my projects.
             </Text>
-            <Projects projects={projects} />
+            <AllProjects projects={projects} />
             <BottomMargin />
         </div>
     );

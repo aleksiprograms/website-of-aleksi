@@ -50,7 +50,7 @@ router.post('/', async (request, response) => {
 
     response
         .status(200)
-        .send({ token, username: user.username });
+        .json({ token, username: user.username });
 });
 
 module.exports = router;
