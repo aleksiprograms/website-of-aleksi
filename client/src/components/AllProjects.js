@@ -1,18 +1,15 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Project from './Project';
 
-const AllProjects = ({ projects }) => {
+const AllProjects = () => {
+    const projects = useSelector(state => state.projects);
+
     return (
         projects.map((project) => (
             <Project
                 key={project.id}
-                title={project.title}
-                text={project.text}
-                platforms={project.platforms}
-                technologies={project.technologies}
-                githubUrl={project.githubUrl}
-                imageUrl={project.imageUrl}
-                imageOrientation={project.imageOrientation}
+                project={project}
             />
         ))
     );

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logIn } from '../../redux/actions/authActions';
 import styled from 'styled-components';
-import loginService from '../../services/login';
 
 const Container = styled.div`
     display: flex;
@@ -74,24 +75,25 @@ const Button = styled.button`
     }
 `;
 
-const LoginForm = ({ setUpUser }) => {
+const LoginForm = () => {
+    const user = useSelector(state => state.auth);
+    const dispatch = useDispatch();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    const login = async (event) => {
-        event.preventDefault();
-        try {
-            const user = await loginService.login(
-                { username: username, password: password });
-            window.localStorage.setItem('loggedUser', JSON.stringify(user));
-            setUsername('');
-            setPassword('');
-            setErrorMessage('');
-            setUpUser(user);
-        } catch (exception) {
+    useEffect(() => {
+        if (!user.authOk) {
             setErrorMessage('Invalid username or password');
         }
+    }, [user]);
+
+    const login = (event) => {
+        event.preventDefault();
+        dispatch(logIn(username, password));
+        setUsername('');
+        setPassword('');
+        setErrorMessage('');
     }
 
     return (

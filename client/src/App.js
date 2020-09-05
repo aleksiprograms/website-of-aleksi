@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getProjects } from './redux/actions/projectActions';
 import styled from 'styled-components';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -37,6 +39,12 @@ const AppContainer = styled.div`
 `;
 
 const App = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getProjects());
+    }, [dispatch]);
+
     return (
         <BrowserRouter>
             <PageContainer>

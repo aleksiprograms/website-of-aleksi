@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import projectService from '../../services/projects';
+import { useDispatch } from 'react-redux';
+import { removeProject } from '../../redux/actions/projectActions';
 
 const Container = styled.div`
     display: flex;
@@ -48,15 +49,15 @@ const ButtonRed = styled(Button)`
 `;
 
 const ProjectAdmin = (props) => {
+    const dispatch = useDispatch();
     const [project] = useState(props.project);
 
     const edit = () => {
         props.setUpProjectForm(project);
     }
 
-    const remove = async () => {
-        await projectService.remove(project);
-        props.removeProject(project);
+    const remove = () => {
+        dispatch(removeProject(project.id));
     }
 
     return (

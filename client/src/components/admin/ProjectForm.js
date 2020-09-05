@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import projectService from '../../services/projects';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { addProject, editProject } from '../../redux/actions/projectActions';
 
 const Title = styled.h2`
     margin-top: 1rem;
@@ -67,7 +68,8 @@ const ButtonRed = styled(Button)`
     }
 `;
 
-const ProjectForm = ({ projectToEdit, hideForm, addProject, editProject }) => {
+const ProjectForm = ({ projectToEdit, hideForm }) => {
+    const dispatch = useDispatch();
     const [title, setTitle] = useState("");
     const [project, setProject] = useState({
         title: '',
@@ -89,15 +91,14 @@ const ProjectForm = ({ projectToEdit, hideForm, addProject, editProject }) => {
         }
     }, [projectToEdit]);
 
-    const submit = async (event) => {
+    const submit = (event) => {
         event.preventDefault();
         if (projectToEdit !== null) {
-            await projectService.update(project);
-            editProject(project);
+            dispatch(editProject(project));
+            hideForm();
         } else {
-            let result = await projectService.create(project);
-            project.id = result.id;
-            addProject(project);
+            dispatch(addProject(project));
+            hideForm();
         }
     }
 

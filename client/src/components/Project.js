@@ -60,20 +60,20 @@ const Text = styled.p`
     font-size: 1rem;
 `;
 
-const Project = ({ title, text, platforms, technologies, githubUrl, imageUrl, imageOrientation }) => {
+const Project = ({ project }) => {
     const renderImage = () => {
-        switch (imageOrientation) {
+        switch (project.imageOrientation) {
             case "landscape":
                 return (
                     <ImageLandscape
-                        src={imageUrl}
+                        src={project.imageUrl}
                         alt="Screenshot from project"
                     />
                 );
             case "portrait":
                 return (
                     <ImagePortrait
-                        src={imageUrl}
+                        src={project.imageUrl}
                         alt="Screenshot from project"
                     />
                 );
@@ -87,20 +87,20 @@ const Project = ({ title, text, platforms, technologies, githubUrl, imageUrl, im
     return (
         <div>
             <TitleContainer>
-                <Title>{title}</Title>
-                <Link href={githubUrl} target="_blank">Github</Link>
+                <Title>{project.title}</Title>
+                <Link href={project.githubUrl} target="_blank">Github</Link>
             </TitleContainer>
             <ListContainer>
                 <strong>Platforms: </strong>
-                <em>{platforms}</em>
+                <em>{project.platforms}</em>
             </ListContainer>
             <ListContainer>
                 <strong>Technologies: </strong>
-                <em>{technologies}</em>
+                <em>{project.technologies}</em>
             </ListContainer>
             <Content>
                 {renderImage()}
-                <Text>{text}</Text>
+                <Text>{project.text}</Text>
             </Content>
         </div>
     );

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import styled from 'styled-components';
 import AllProjects from '../components/AllProjects';
 
@@ -30,16 +29,6 @@ const BottomMargin = styled.div`
 `;
 
 const ProjectsPage = () => {
-    const [projects, setProjects] = useState([]);
-
-    useEffect(() => {
-        axios
-            .get('/api/projects')
-            .then(response => {
-                setProjects(response.data);
-            });
-    }, []);
-
     return (
         <div>
             <Title>Projects</Title>
@@ -49,7 +38,7 @@ const ProjectsPage = () => {
                 You can check my <Link className="link" href="https://github.com/aleksiprograms" target="_blank">Github profile</Link> to
                 see rest of my projects.
             </Text>
-            <AllProjects projects={projects} />
+            <AllProjects />
             <BottomMargin />
         </div>
     );
