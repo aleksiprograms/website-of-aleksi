@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Redirect, useHistory, useLocation } from "react-router-dom";
 import styled from 'styled-components';
-import useProjectApi from '../../hooks/useProjectApi';
+import { UserContext } from '../context/UserContext';
+import useProjectApi from '../hooks/useProjectApi';
 
 const Title = styled.h2`
     margin-top: 1rem;
@@ -67,7 +69,11 @@ const ButtonRed = styled(Button)`
     }
 `;
 
-const ProjectForm = ({ projectToEdit, hideForm }) => {
+const CreateView = () => {
+
+    const location = useLocation();
+    const history = useHistory();
+    const userContext = useContext(UserContext);
     const projectApi = useProjectApi();
     const [title, setTitle] = useState("");
     const [project, setProject] = useState({
@@ -82,23 +88,32 @@ const ProjectForm = ({ projectToEdit, hideForm }) => {
     });
 
     useEffect(() => {
-        if (projectToEdit !== null) {
+        if (location.state != null) {
             setTitle("Edit project");
-            setProject(projectToEdit);
+            setProject(location.state.project);
         } else {
             setTitle("Add project");
         }
-    }, [projectToEdit]);
+    }, [location.state]);
+
+    if (userContext.user == null) {
+        return (
+            <Redirect to="/login" />
+        );
+    }
 
     const submit = (event) => {
         event.preventDefault();
-        if (projectToEdit !== null) {
+        if (location.state != null) {
             projectApi.editProject(project);
-            hideForm();
         } else {
             projectApi.addProject(project);
-            hideForm();
         }
+        history.push("/admin");
+    }
+
+    const cancel = () => {
+        history.push("/admin");
     }
 
     return (
@@ -204,7 +219,7 @@ const ProjectForm = ({ projectToEdit, hideForm }) => {
                     />
                 </FormRow>
                 <ButtonsContainer>
-                    <ButtonRed onClick={hideForm}>CANCEL</ButtonRed>
+                    <ButtonRed onClick={cancel}>CANCEL</ButtonRed>
                     <ButtonBlue type="submit">SAVE</ButtonBlue>
                 </ButtonsContainer>
             </form>
@@ -212,4 +227,4 @@ const ProjectForm = ({ projectToEdit, hideForm }) => {
     );
 };
 
-export default ProjectForm;
+export default CreateView;

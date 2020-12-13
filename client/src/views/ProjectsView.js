@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import AllProjects from '../components/AllProjects';
+import { ProjectContext } from '../context/ProjectContext';
+import Project from '../components/Project';
 
 const Title = styled.h2`
     color: #000;
@@ -28,7 +29,10 @@ const BottomMargin = styled.div`
     margin-bottom: 1rem;
 `;
 
-const ProjectsPage = () => {
+const ProjectsView = () => {
+
+    const projectContext = useContext(ProjectContext);
+
     return (
         <div>
             <Title>Projects</Title>
@@ -38,10 +42,17 @@ const ProjectsPage = () => {
                 You can check my <Link className="link" href="https://github.com/aleksiprograms" target="_blank">Github profile</Link> to
                 see rest of my projects.
             </Text>
-            <AllProjects />
+            {projectContext.projects.map((project) => {
+                return (
+                    <Project
+                        key={project.id}
+                        project={project}
+                    />
+                );
+            })}
             <BottomMargin />
         </div>
     );
 };
 
-export default ProjectsPage;
+export default ProjectsView;

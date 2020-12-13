@@ -66,7 +66,7 @@ const Button = styled(Link)`
     }
 `;
 
-const HomePage = () => {
+const HomeView = () => {
     return (
         <Container>
             <TextContainer>
@@ -87,4 +87,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default HomeView;

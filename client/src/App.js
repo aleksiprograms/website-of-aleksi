@@ -7,9 +7,11 @@ import useUserApi from './hooks/useUserApi';
 import useProjectApi from './hooks/useProjectApi';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import ProjectsPage from './pages/ProjectsPage';
-import AdminPage from './pages/AdminPage';
+import HomeView from './views/HomeView';
+import ProjectsView from './views/ProjectsView';
+import AdminView from './views/AdminView';
+import LoginView from './views/LoginView';
+import CreateView from './views/CreateView';
 
 const PageContainer = styled.div`
     display: flex;
@@ -67,9 +69,11 @@ const App = () => {
                         <PageContainer>
                             <Header />
                             <AppContainer>
-                                <Route exact path="/" component={HomePage} />
-                                <Route path="/projects" component={ProjectsPage} />
-                                <Route path="/admin" component={AdminPage} />
+                                <Route exact path="/" component={HomeView} />
+                                <Route path="/projects" component={ProjectsView} />
+                                <Route path="/admin" component={AdminView} />
+                                <Route path="/login" component={LoginView} />
+                                <Route path="/create" component={CreateView} />
                             </AppContainer>
                             <Footer />
                         </PageContainer>

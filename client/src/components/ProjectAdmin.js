@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import styled from 'styled-components';
-import useProjectApi from '../../hooks/useProjectApi';
+import useProjectApi from '../hooks/useProjectApi';
 
 const Container = styled.div`
     display: flex;
@@ -48,11 +49,16 @@ const ButtonRed = styled(Button)`
 `;
 
 const ProjectAdmin = (props) => {
+
+    const history = useHistory();
     const [project] = useState(props.project);
     const projectApi = useProjectApi();
 
     const edit = () => {
-        props.setUpProjectForm(project);
+        history.push({
+            pathname: '/create',
+            state: { project }
+        });
     }
 
     const remove = () => {

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Redirect } from "react-router-dom";
 import styled from 'styled-components';
-import { UserContext } from '../../context/UserContext';
-import useUserApi from '../../hooks/useUserApi';
+import { UserContext } from '../context/UserContext';
+import useUserApi from '../hooks/useUserApi';
 
 const Container = styled.div`
     display: flex;
@@ -75,7 +76,7 @@ const Button = styled.button`
     }
 `;
 
-const LoginForm = () => {
+const LoginView = () => {
 
     const userContext = useContext(UserContext);
     const userApi = useUserApi();
@@ -88,6 +89,12 @@ const LoginForm = () => {
         setPassword('');
         setErrorMessage(userContext.error);
     }, [userContext.error]);
+
+    if (userContext.user != null) {
+        return (
+            <Redirect to="/admin" />
+        );
+    }
 
     const login = (event) => {
         event.preventDefault();
@@ -121,4 +128,4 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+export default LoginView;
