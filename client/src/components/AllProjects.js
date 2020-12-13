@@ -1,12 +1,12 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useContext } from 'react';
+import { ProjectContext } from '../context/ProjectContext';
 import Project from './Project';
 
 const AllProjects = () => {
-    const projects = useSelector(state => state.projects);
+    const projectContext = useContext(ProjectContext);
 
     return (
-        projects.map((project) => (
+        projectContext.projects.map((project) => (
             <Project
                 key={project.id}
                 project={project}

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { logIn } from '../../redux/actions/authActions';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
+import { UserContext } from '../../context/UserContext';
+import useUserApi from '../../hooks/useUserApi';
 
 const Container = styled.div`
     display: flex;
@@ -76,24 +76,22 @@ const Button = styled.button`
 `;
 
 const LoginForm = () => {
-    const user = useSelector(state => state.auth);
-    const dispatch = useDispatch();
+
+    const userContext = useContext(UserContext);
+    const userApi = useUserApi();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
-        if (!user.authOk) {
-            setErrorMessage('Invalid username or password');
-        }
-    }, [user]);
+        setUsername('');
+        setPassword('');
+        setErrorMessage(userContext.error);
+    }, [userContext.error]);
 
     const login = (event) => {
         event.preventDefault();
-        dispatch(logIn(username, password));
-        setUsername('');
-        setPassword('');
-        setErrorMessage('');
+        userApi.login(username, password);
     }
 
     return (

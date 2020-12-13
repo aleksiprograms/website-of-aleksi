@@ -1,6 +1,6 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { ProjectContext } from '../../context/ProjectContext';
 import ProjectAdmin from './ProjectAdmin';
 
 const TitleContainer = styled.div`
@@ -32,7 +32,7 @@ const Button = styled.button`
 `;
 
 const AllProjectsAdmin = ({ setUpProjectForm }) => {
-    const projects = useSelector(state => state.projects);
+    const projectContext = useContext(ProjectContext);
 
     return (
         <div>
@@ -40,7 +40,7 @@ const AllProjectsAdmin = ({ setUpProjectForm }) => {
                 <Title>Projects</Title>
                 <Button onClick={() => setUpProjectForm(null)}>ADD PROJECT</Button>
             </TitleContainer>
-            {projects.map((project) => (
+            {projectContext.projects.map((project) => (
                 <ProjectAdmin
                     key={project.id}
                     project={project}

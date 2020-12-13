@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { removeProject } from '../../redux/actions/projectActions';
+import useProjectApi from '../../hooks/useProjectApi';
 
 const Container = styled.div`
     display: flex;
@@ -49,15 +48,15 @@ const ButtonRed = styled(Button)`
 `;
 
 const ProjectAdmin = (props) => {
-    const dispatch = useDispatch();
     const [project] = useState(props.project);
+    const projectApi = useProjectApi();
 
     const edit = () => {
         props.setUpProjectForm(project);
     }
 
     const remove = () => {
-        dispatch(removeProject(project.id));
+        projectApi.removeProject(project.id);
     }
 
     return (

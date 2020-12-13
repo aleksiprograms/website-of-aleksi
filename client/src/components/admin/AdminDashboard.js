@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { logOut } from '../../redux/actions/authActions';
 import styled from 'styled-components';
+import useUserApi from '../../hooks/useUserApi';
 import ProjectForm from './ProjectForm';
 import AllProjectsAdmin from './AllProjectsAdmin';
 
@@ -34,12 +33,13 @@ const Button = styled.button`
 `;
 
 const AdminDashboard = () => {
-    const dispatch = useDispatch();
+
+    const userApi = useUserApi();
     const [projectToEdit, setProjectToEdit] = useState(null);
     const [showProjectForm, setShowProjectForm] = useState(false);
 
     const logout = () => {
-        dispatch(logOut());
+        userApi.logout();
     }
 
     const setUpProjectForm = (project) => {

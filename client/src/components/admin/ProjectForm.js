@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { addProject, editProject } from '../../redux/actions/projectActions';
+import useProjectApi from '../../hooks/useProjectApi';
 
 const Title = styled.h2`
     margin-top: 1rem;
@@ -69,7 +68,7 @@ const ButtonRed = styled(Button)`
 `;
 
 const ProjectForm = ({ projectToEdit, hideForm }) => {
-    const dispatch = useDispatch();
+    const projectApi = useProjectApi();
     const [title, setTitle] = useState("");
     const [project, setProject] = useState({
         title: '',
@@ -94,10 +93,10 @@ const ProjectForm = ({ projectToEdit, hideForm }) => {
     const submit = (event) => {
         event.preventDefault();
         if (projectToEdit !== null) {
-            dispatch(editProject(project));
+            projectApi.editProject(project);
             hideForm();
         } else {
-            dispatch(addProject(project));
+            projectApi.addProject(project);
             hideForm();
         }
     }

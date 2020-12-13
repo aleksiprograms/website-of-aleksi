@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { getProjects } from './redux/actions/projectActions';
 import styled from 'styled-components';
+import { UserProvider } from './context/UserContext';
+import { ProjectProvider } from './context/ProjectContext';
+import useUserApi from './hooks/useUserApi';
+import useProjectApi from './hooks/useProjectApi';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -38,24 +40,42 @@ const AppContainer = styled.div`
     }
 `;
 
-const App = () => {
-    const dispatch = useDispatch();
+const Initializer = ({ children }) => {
+
+    const userApi = useUserApi();
+    const projectApi = useProjectApi();
 
     useEffect(() => {
-        dispatch(getProjects());
-    }, [dispatch]);
+        userApi.initIfSaved();
+        projectApi.getProjects();
+    }, []);
+
+    return (
+        <>
+            {children}
+        </>
+    );
+}
+
+const App = () => {
 
     return (
         <BrowserRouter>
-            <PageContainer>
-                <Header />
-                <AppContainer>
-                    <Route exact path="/" component={HomePage} />
-                    <Route path="/projects" component={ProjectsPage} />
-                    <Route path="/admin" component={AdminPage} />
-                </AppContainer>
-                <Footer />
-            </PageContainer>
+            <UserProvider>
+                <ProjectProvider>
+                    <Initializer>
+                        <PageContainer>
+                            <Header />
+                            <AppContainer>
+                                <Route exact path="/" component={HomePage} />
+                                <Route path="/projects" component={ProjectsPage} />
+                                <Route path="/admin" component={AdminPage} />
+                            </AppContainer>
+                            <Footer />
+                        </PageContainer>
+                    </Initializer>
+                </ProjectProvider>
+            </UserProvider>
         </BrowserRouter>
     );
 };
