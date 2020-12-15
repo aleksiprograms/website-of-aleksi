@@ -1,53 +1,128 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import Navigation from './Navigation';
+import React, { useState, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import {
+    Container,
+    AppBar,
+    Toolbar,
+    Link,
+    Typography,
+    Button,
+    IconButton,
+    Collapse,
+    Box,
+    Grid,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import MenuIcon from '@material-ui/icons/Menu';
 
-const Container = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #111;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    padding-left: 25%;
-    padding-right: 25%;
-    
-    @media (max-width: 1500px) {
-        padding-left: 20%;
-        padding-right: 20%;
-    }
-    @media (max-width: 1200px) {
-        padding-left: 15%;
-        padding-right: 15%;
-    }
-    @media (max-width: 900px) {
-        padding-left: 10%;
-        padding-right: 10%;
-    }
-    @media (max-width: 600px) {
-        flex-direction: column;
-        justify-content: center;
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-`;
-
-const Title = styled(Link)`
-    color: #fff;
-    font-size: 1.6rem;
-    font-weight: bold;
-    text-decoration: none;
-`;
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+        backgroundColor: "#111"
+    },
+    title: {
+        flexGrow: 1,
+    },
+}));
 
 const Header = () => {
+
+    const isOnMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
+
+    const classes = useStyles();
+    const history = useHistory();
+    const location = useLocation();
+
+    const [navigations, setNavigations] = useState([
+        { title: "Home", path: "/", active: false },
+        { title: "Projects", path: "/projects", active: false }
+    ]);
+    const [openMenuOnMobile, setOpenMenuOnMobile] = useState(false);
+
+    useEffect(() => {
+        if (!isOnMobile) {
+            setOpenMenuOnMobile(false);
+        }
+    }, [isOnMobile]);
+
+    useEffect(() => {
+        setNavigations(prevNavigations => {
+            return prevNavigations.map(prevNavigation => {
+                if (prevNavigation.path === location.pathname) {
+                    return {
+                        ...prevNavigation,
+                        active: true,
+                    };
+                } else {
+                    return {
+                        ...prevNavigation,
+                        active: false,
+                    };
+                }
+            });
+        });
+    }, [location.pathname]);
+
+    const renderNavigation = () => {
+        return (
+            <>
+                {navigations.map((navigation) => {
+                    return (
+                        <Button
+                            key={navigation.path}
+                            color={navigation.active ? "primary" : "inherit"}
+                            onClick={() => {
+                                setOpenMenuOnMobile(false);
+                                history.push(navigation.path);
+                            }}
+                        >
+                            {navigation.title}
+                        </Button>
+                    );
+                })}
+            </>
+        );
+    }
+
     return (
-        <Container>
-            <Title to="/">Website of Aleksi</Title>
-            <Navigation />
-        </Container>
+        <AppBar position="static" className={classes.root}>
+            <Container maxWidth="md">
+                <Toolbar>
+                    <Typography variant="h6" className={classes.title}>
+                        <Link href="/" color="inherit" underline="none">
+                            Website of Aleksi
+                        </Link>
+                    </Typography>
+                    {isOnMobile ?
+                        <IconButton
+                            edge="end"
+                            color="inherit"
+                            onClick={() => setOpenMenuOnMobile(prevState => !prevState)}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        :
+                        <>
+                            {renderNavigation()}
+                        </>
+                    }
+                </Toolbar>
+                <Collapse in={openMenuOnMobile} timeout="auto" unmountOnExit>
+                    <Box mb={1}>
+                        <Grid
+                            container
+                            direction="column"
+                            justify="center"
+                            alignContent="center"
+                        >
+                            {renderNavigation()}
+                        </Grid>
+                    </Box>
+                </Collapse>
+            </Container>
+        </AppBar>
     );
-};
+}
 
 export default Header;
