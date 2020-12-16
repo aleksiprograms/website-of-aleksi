@@ -86,7 +86,7 @@ const Header = () => {
     }
 
     return (
-        <AppBar position="static" className={classes.root}>
+        <AppBar position="sticky" className={classes.root}>
             <Container maxWidth="md">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
