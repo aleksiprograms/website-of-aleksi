@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Redirect, useHistory } from "react-router-dom";
 import {
     Box,
@@ -18,6 +18,7 @@ import { UserContext } from '../context/UserContext';
 import { ProjectContext } from '../context/ProjectContext';
 import useUserApi from '../hooks/useUserApi';
 import useProjectApi from '../hooks/useProjectApi';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const AdminView = () => {
 
@@ -26,6 +27,8 @@ const AdminView = () => {
     const projectContext = useContext(ProjectContext);
     const userApi = useUserApi();
     const projectApi = useProjectApi();
+    const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+    const [projectToRemoveId, setProjectToRemoveId] = useState("");
 
     if (userContext.user == null) {
         return (
@@ -48,72 +51,83 @@ const AdminView = () => {
         });
     }
 
-    const remove = (id) => {
-        projectApi.removeProject(id);
+    const remove = () => {
+        projectApi.removeProject(projectToRemoveId);
+        setConfirmDialogOpen(false);
     }
 
     return (
-        <Box mt={2} mb={2}>
-            <Grid container spacing={2}>
-                <Grid item container justify="center">
-                    <Grid container justify="space-between">
-                        <Typography variant="h5">
-                            Admin Dashboard
-                        </Typography>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={logout}
-                        >
-                            Logout
-                        </Button>
+        <>
+            <Box mt={2} mb={2}>
+                <Grid container spacing={2}>
+                    <Grid item container justify="center">
+                        <Grid container justify="space-between">
+                            <Typography variant="h5">
+                                Admin Dashboard
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={logout}
+                            >
+                                Logout
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    <Grid item container justify="center">
+                        <Grid container justify="space-between">
+                            <Typography variant="h6">
+                                Projects
+                            </Typography>
+                            <Button
+                                color="primary"
+                                onClick={add}
+                            >
+                                Add project
+                            </Button>
+                        </Grid>
+                        <List style={{ width: "100%" }} disablePadding>
+                            {projectContext.projects.map((project) => {
+                                return (
+                                    <ListItem key={project.id} disableGutters>
+                                        <ListItemText
+                                            primary={project.title}
+                                        />
+                                        <ListItemSecondaryAction>
+                                            <>
+                                                <Tooltip title="Edit">
+                                                    <IconButton
+                                                        onClick={() => edit(project)}
+                                                    >
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Delete">
+                                                    <IconButton
+                                                        edge="end"
+                                                        onClick={() => {
+                                                            setProjectToRemoveId(project.id);
+                                                            setConfirmDialogOpen(true);
+                                                        }}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
                     </Grid>
                 </Grid>
-                <Grid item container justify="center">
-                    <Grid container justify="space-between">
-                        <Typography variant="h6">
-                            Projects
-                        </Typography>
-                        <Button
-                            color="primary"
-                            onClick={add}
-                        >
-                            Add project
-                        </Button>
-                    </Grid>
-                    <List style={{ width: "100%" }} disablePadding>
-                        {projectContext.projects.map((project) => {
-                            return (
-                                <ListItem key={project.id} disableGutters>
-                                    <ListItemText
-                                        primary={project.title}
-                                    />
-                                    <ListItemSecondaryAction>
-                                        <>
-                                            <Tooltip title="Edit">
-                                                <IconButton
-                                                    onClick={() => edit(project)}
-                                                >
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title="Delete">
-                                                <IconButton
-                                                    edge="end"
-                                                    onClick={() => remove(project.id)}
-                                                >
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            );
-                        })}
-                    </List>
-                </Grid>
-            </Grid>
-        </Box>
+            </Box>
+            <ConfirmDialog
+                open={confirmDialogOpen}
+                onCancel={() => setConfirmDialogOpen(false)}
+                onConfirm={remove}
+                text="Are you sure you want to delete this project?" />
+        </>
     );
 }
 
