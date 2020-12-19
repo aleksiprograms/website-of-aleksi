@@ -1,76 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Redirect, useHistory, useLocation } from "react-router-dom";
-import styled from 'styled-components';
+import {
+    Box,
+    Grid,
+    Typography,
+    Button,
+    TextField,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { UserContext } from '../context/UserContext';
 import useProjectApi from '../hooks/useProjectApi';
 
-const Title = styled.h2`
-    margin-top: 1rem;
-    color: #000;
-    font-size: 1.5rem;
-`;
-
-const FormRow = styled.div`
-    display: flex;
-    flex: 1 0 auto;
-    flex-direction: column;
-    margin-top: 0.3rem;
-`;
-
-const InputTitle = styled.p`
-    color: #000;
-    font-size: 1rem;
-`;
-
-const Input = styled.input`
-    color: #000;
-    font-size: 0.85rem;
-    width: 100%;
-`;
-
-const TextArea = styled.textarea`
-    color: #000;
-    font-size: 0.85rem;
-    width: 100%;
-`;
-
-const ButtonsContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-`;
-
-const Button = styled.button`
-    color: #fff;
-    background-color: #111;
-    text-decoration: none;
-    font-size: 1rem;
-    border-radius: 0.5rem;
-    width: 5.6rem;
-    height: 2.3rem;
-`;
-
-const ButtonBlue = styled(Button)`
-    border: 0.20rem solid #00f;
-    margin-left: 1rem;
-
-    &:hover {
-        background-color: #00f;
-    }
-`;
-
-const ButtonRed = styled(Button)`
-    border: 0.20rem solid #f00;
-
-    &:hover {
-        background-color: #f00;
-    }
-`;
+const useStyles = makeStyles((theme) => ({
+    field: {
+        width: "100%",
+    },
+}));
 
 const CreateView = () => {
 
+    const classes = useStyles();
     const location = useLocation();
     const history = useHistory();
     const userContext = useContext(UserContext);
@@ -102,8 +51,7 @@ const CreateView = () => {
         );
     }
 
-    const submit = (event) => {
-        event.preventDefault();
+    const submit = () => {
         if (location.state != null) {
             projectApi.editProject(project);
         } else {
@@ -117,114 +65,159 @@ const CreateView = () => {
     }
 
     return (
-        <div>
-            <Title>{title}</Title>
-            <form onSubmit={submit}>
-                <FormRow>
-                    <InputTitle>Title</InputTitle>
-                    <Input
-                        type="text"
+        <Box mt={2} mb={2}>
+            <Grid container spacing={2}>
+                <Grid item container>
+                    <Typography variant="h4">
+                        {title}
+                    </Typography>
+                </Grid>
+                <Grid item container>
+                    <TextField
+                        label="Title"
                         value={project.title}
-                        onChange={({ target }) => {
+                        onChange={(event) => {
+                            event.persist();
                             setProject(prevState => {
-                                return { ...prevState, title: target.value }
+                                return { ...prevState, title: event.target.value }
                             });
                         }}
+                        fullWidth
+                        variant="outlined"
+                        autoFocus
+                        className={classes.field}
                     />
-                </FormRow>
-                <FormRow>
-                    <InputTitle>Text</InputTitle>
-                    <TextArea
-                        style={{ resize: "none" }}
-                        rows="10"
-                        type="text"
+                </Grid>
+                <Grid item container>
+                    <TextField
+                        label="Text"
                         value={project.text}
-                        onChange={({ target }) => {
+                        onChange={(event) => {
+                            event.persist();
                             setProject(prevState => {
-                                return { ...prevState, text: target.value }
+                                return { ...prevState, text: event.target.value }
                             });
                         }}
+                        fullWidth
+                        variant="outlined"
+                        multiline
+                        className={classes.field}
                     />
-                </FormRow>
-                <FormRow>
-                    <InputTitle>Platforms</InputTitle>
-                    <Input
-                        type="text"
+                </Grid>
+                <Grid item container>
+                    <TextField
+                        label="Platforms"
                         value={project.platforms}
-                        onChange={({ target }) => {
+                        onChange={(event) => {
+                            event.persist();
                             setProject(prevState => {
-                                return { ...prevState, platforms: target.value }
+                                return { ...prevState, platforms: event.target.value }
                             });
                         }}
+                        fullWidth
+                        variant="outlined"
+                        className={classes.field}
                     />
-                </FormRow>
-                <FormRow>
-                    <InputTitle>Technologies</InputTitle>
-                    <Input
-                        type="text"
+                </Grid>
+                <Grid item container>
+                    <TextField
+                        label="Technologies"
                         value={project.technologies}
-                        onChange={({ target }) => {
+                        onChange={(event) => {
+                            event.persist();
                             setProject(prevState => {
-                                return { ...prevState, technologies: target.value }
+                                return { ...prevState, technologies: event.target.value }
                             });
                         }}
+                        fullWidth
+                        variant="outlined"
+                        className={classes.field}
                     />
-                </FormRow>
-                <FormRow>
-                    <InputTitle>Github Url</InputTitle>
-                    <Input
-                        type="text"
+                </Grid>
+                <Grid item container>
+                    <TextField
+                        label="Github Url"
                         value={project.githubUrl}
-                        onChange={({ target }) => {
+                        onChange={(event) => {
+                            event.persist();
                             setProject(prevState => {
-                                return { ...prevState, githubUrl: target.value }
+                                return { ...prevState, githubUrl: event.target.value }
                             });
                         }}
+                        fullWidth
+                        variant="outlined"
+                        className={classes.field}
                     />
-                </FormRow>
-                <FormRow>
-                    <InputTitle>Image Url</InputTitle>
-                    <Input
-                        type="text"
+                </Grid>
+                <Grid item container>
+                    <TextField
+                        label="Image Url"
                         value={project.imageUrl}
-                        onChange={({ target }) => {
+                        onChange={(event) => {
+                            event.persist();
                             setProject(prevState => {
-                                return { ...prevState, imageUrl: target.value }
+                                return { ...prevState, imageUrl: event.target.value }
                             });
                         }}
+                        fullWidth
+                        variant="outlined"
+                        className={classes.field}
                     />
-                </FormRow>
-                <FormRow>
-                    <InputTitle>Image Orientation</InputTitle>
-                    <Input
-                        type="text"
+                </Grid>
+                <Grid item container>
+                    <TextField
+                        label="Image Orientation"
                         value={project.imageOrientation}
-                        onChange={({ target }) => {
+                        onChange={(event) => {
+                            event.persist();
                             setProject(prevState => {
-                                return { ...prevState, imageOrientation: target.value }
+                                return { ...prevState, imageOrientation: event.target.value }
                             });
                         }}
+                        fullWidth
+                        variant="outlined"
+                        className={classes.field}
                     />
-                </FormRow>
-                <FormRow>
-                    <InputTitle>Place In Projects</InputTitle>
-                    <Input
-                        type="text"
+                </Grid>
+                <Grid item container>
+                    <TextField
+                        label="Place In Projects"
                         value={project.placeInProjects}
-                        onChange={({ target }) => {
+                        onChange={(event) => {
+                            event.persist();
                             setProject(prevState => {
-                                return { ...prevState, placeInProjects: target.value }
+                                return { ...prevState, placeInProjects: event.target.value }
                             });
                         }}
+                        fullWidth
+                        variant="outlined"
+                        type="number"
+                        className={classes.field}
                     />
-                </FormRow>
-                <ButtonsContainer>
-                    <ButtonRed onClick={cancel}>CANCEL</ButtonRed>
-                    <ButtonBlue type="submit">SAVE</ButtonBlue>
-                </ButtonsContainer>
-            </form>
-        </div>
+                </Grid>
+                <Grid item container justify="center" spacing={2}>
+                    <Grid item>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={cancel}
+                        >
+                            Cancel
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={submit}
+                        >
+                            Save
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Box>
     );
-};
+}
 
 export default CreateView;
