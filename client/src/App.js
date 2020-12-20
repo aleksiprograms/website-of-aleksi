@@ -23,9 +23,12 @@ import CreateView from './views/CreateView';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        //display: "flex",
-        //flexDirection: "column",
-        //minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+    },
+    content: {
+        flex: 1,
     },
 }));
 
@@ -70,7 +73,7 @@ const App = () => {
                             <div className={classes.root}>
                                 <CssBaseline />
                                 <Header />
-                                <Container maxWidth="md">
+                                <Container maxWidth="md" className={classes.content}>
                                     <Route exact path="/" component={HomeView} />
                                     <Route path="/projects" component={ProjectsView} />
                                     <Route path="/admin" component={AdminView} />

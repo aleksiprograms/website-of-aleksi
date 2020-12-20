@@ -18,7 +18,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
         backgroundColor: "#111"
     },
     title: {
@@ -86,7 +85,7 @@ const Header = () => {
     }
 
     return (
-        <AppBar position="sticky" className={classes.root}>
+        <AppBar position="static" className={classes.root}>
             <Container maxWidth="md">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
