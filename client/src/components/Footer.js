@@ -1,30 +1,41 @@
 import React from 'react';
-import styled from 'styled-components';
+import {
+    Container,
+    Grid,
+    Typography,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-const Container = styled.div`
-    flex-shrink: 0;
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    padding-top: 0.7rem;
-    padding-bottom: 0.7rem;
-    background-color: #111;
-`;
-
-const Text = styled.p`
-    color: #fff;
-    font-size: 0.8rem;
-    align-self: center;
-`;
+const useStyles = makeStyles((theme) => ({
+    root: {
+        backgroundColor: "#111",
+    },
+    text: {
+        color: "#fff",
+        paddingTop: 10,
+        paddingBottom: 10,
+    },
+}));
 
 const Footer = () => {
+
+    const classes = useStyles();
+
     return (
-        <Container>
-            <Text>
-                Copyright &copy; 2020 Aleksi Tolvanen. All Rights Reserved
-            </Text>
-        </Container>
+        <div className={classes.root}>
+            <Container maxWidth="md">
+                <Grid container justify="center">
+                    <Typography
+                        variant="caption"
+                        align="center"
+                        className={classes.text}
+                    >
+                        Copyright &copy; 2020 - {new Date().getFullYear()} Aleksi Tolvanen, All Rights Reserved
+                    </Typography>
+                </Grid>
+            </Container>
+        </div>
     );
-};
+}
 
 export default Footer;
