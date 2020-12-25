@@ -6,20 +6,16 @@ import {
     Typography,
     Button,
     TextField,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { UserContext } from '../context/UserContext';
 import useProjectApi from '../hooks/useProjectApi';
 
-const useStyles = makeStyles((theme) => ({
-    field: {
-        width: "100%",
-    },
-}));
-
 const CreateView = () => {
 
-    const classes = useStyles();
     const location = useLocation();
     const history = useHistory();
     const userContext = useContext(UserContext);
@@ -32,8 +28,7 @@ const CreateView = () => {
         technologies: '',
         githubUrl: '',
         imageUrl: '',
-        imageOrientation: '',
-        placeInProjects: ''
+        imageOrientation: 'none',
     });
 
     useEffect(() => {
@@ -85,7 +80,6 @@ const CreateView = () => {
                         fullWidth
                         variant="outlined"
                         autoFocus
-                        className={classes.field}
                     />
                 </Grid>
                 <Grid item container>
@@ -101,7 +95,6 @@ const CreateView = () => {
                         fullWidth
                         variant="outlined"
                         multiline
-                        className={classes.field}
                     />
                 </Grid>
                 <Grid item container>
@@ -116,7 +109,6 @@ const CreateView = () => {
                         }}
                         fullWidth
                         variant="outlined"
-                        className={classes.field}
                     />
                 </Grid>
                 <Grid item container>
@@ -131,7 +123,6 @@ const CreateView = () => {
                         }}
                         fullWidth
                         variant="outlined"
-                        className={classes.field}
                     />
                 </Grid>
                 <Grid item container>
@@ -146,7 +137,6 @@ const CreateView = () => {
                         }}
                         fullWidth
                         variant="outlined"
-                        className={classes.field}
                     />
                 </Grid>
                 <Grid item container>
@@ -158,43 +148,41 @@ const CreateView = () => {
                             setProject(prevState => {
                                 return { ...prevState, imageUrl: event.target.value }
                             });
+                            if (event.target.value === "") {
+                                setProject(prevState => {
+                                    return { ...prevState, imageOrientation: 'none' }
+                                });
+                            }
+                            if (event.target.value !== "" && project.imageOrientation === 'none') {
+                                setProject(prevState => {
+                                    return { ...prevState, imageOrientation: 'landscape' }
+                                });
+                            }
                         }}
                         fullWidth
                         variant="outlined"
-                        className={classes.field}
                     />
                 </Grid>
-                <Grid item container>
-                    <TextField
-                        label="Image Orientation"
-                        value={project.imageOrientation}
-                        onChange={(event) => {
-                            event.persist();
-                            setProject(prevState => {
-                                return { ...prevState, imageOrientation: event.target.value }
-                            });
-                        }}
-                        fullWidth
-                        variant="outlined"
-                        className={classes.field}
-                    />
-                </Grid>
-                <Grid item container>
-                    <TextField
-                        label="Place In Projects"
-                        value={project.placeInProjects}
-                        onChange={(event) => {
-                            event.persist();
-                            setProject(prevState => {
-                                return { ...prevState, placeInProjects: event.target.value }
-                            });
-                        }}
-                        fullWidth
-                        variant="outlined"
-                        type="number"
-                        className={classes.field}
-                    />
-                </Grid>
+                {project?.imageUrl?.length > 0 &&
+                    <Grid item container>
+                        <FormControl variant="outlined" fullWidth>
+                            <InputLabel>Image Orientation</InputLabel>
+                            <Select
+                                value={project.imageOrientation}
+                                label="Image Orientation"
+                                onChange={(event) => {
+                                    event.persist();
+                                    setProject(prevState => {
+                                        return { ...prevState, imageOrientation: event.target.value }
+                                    });
+                                }}
+                            >
+                                <MenuItem value="landscape">Landscape</MenuItem>
+                                <MenuItem value="portrait">Portrait</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                }
                 <Grid item container justify="center" spacing={2}>
                     <Grid item>
                         <Button
