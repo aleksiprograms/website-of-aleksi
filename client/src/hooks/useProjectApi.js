@@ -18,6 +18,7 @@ const useProjectApi = () => {
     }
 
     const addProject = (project) => {
+        project.placeInProjects = projectContext.projects.length + 1;
         axios.post('/api/projects', project, getTokenConfig())
             .then((response) => {
                 project.id = response.data.id;
@@ -57,6 +58,30 @@ const useProjectApi = () => {
             });
     }
 
+    const reorderProjects = (result) => {
+        projectContext.setLoading(true);
+        const items = Array.from(projectContext.projects);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        projectContext.setProjects(items);
+        let posts = [];
+        for (let i = 0; i < items.length; i++) {
+            let project = {
+                ...items[i],
+                placeInProjects: i + 1,
+            }
+            posts[i] = axios.put(`${'/api/projects'}/${project.id}`, project, getTokenConfig());
+        }
+        axios.all(posts)
+            .then(axios.spread((...responses) => {
+            }))
+            .catch(errors => {
+            })
+            .finally(() => {
+                projectContext.setLoading(false);
+            });
+    }
+
     const getTokenConfig = () => {
         let token = userContext.user.token;
         const config = {
@@ -70,6 +95,7 @@ const useProjectApi = () => {
         addProject,
         editProject,
         removeProject,
+        reorderProjects,
     });
 };
 

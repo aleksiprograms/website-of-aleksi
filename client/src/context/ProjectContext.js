@@ -5,6 +5,7 @@ const ProjectContext = createContext();
 const ProjectProvider = ({ children }) => {
 
     const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
     }, []);
@@ -12,6 +13,8 @@ const ProjectProvider = ({ children }) => {
     let values = {
         projects,
         setProjects,
+        loading,
+        setLoading,
     }
 
     return (

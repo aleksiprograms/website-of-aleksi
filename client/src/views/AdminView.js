@@ -7,13 +7,20 @@ import {
     Button,
     List,
     ListItem,
+    ListItemIcon,
     ListItemText,
-    ListItemSecondaryAction,
     IconButton,
     Tooltip,
+    CircularProgress,
 } from '@material-ui/core';
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import {
+    DragDropContext,
+    Droppable,
+    Draggable,
+} from 'react-beautiful-dnd';
 import { UserContext } from '../context/UserContext';
 import { ProjectContext } from '../context/ProjectContext';
 import useUserApi from '../hooks/useUserApi';
@@ -56,6 +63,83 @@ const AdminView = () => {
         setConfirmDialogOpen(false);
     }
 
+    const onDragEnd = (result) => {
+        if (result.destination) {
+            projectApi.reorderProjects(result);
+        }
+    }
+
+    const renderProjectList = () => {
+        return (
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppableProjects">
+                    {(provided) => (
+                        <List
+                            style={{ width: "100%" }}
+                            disablePadding
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                        >
+                            {projectContext.projects.map((project, index) => {
+                                return (
+                                    renderProject(project, index)
+                                );
+                            })}
+                            {provided.placeholder}
+                        </List>
+                    )}
+                </Droppable>
+            </DragDropContext>
+        );
+    }
+
+    const renderProject = (project, index) => {
+        return (
+            <Draggable
+                key={project.id}
+                draggableId={project.id + ""}
+                index={index}
+            >
+                {(provided) => (
+                    <ListItem
+                        disableGutters
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                    >
+                        <ListItemIcon {...provided.dragHandleProps}>
+                            <DragIndicatorIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={project.title}
+                        />
+                        <ListItemIcon>
+                            <Tooltip title="Edit">
+                                <IconButton
+                                    onClick={() => edit(project)}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </ListItemIcon>
+                        <ListItemIcon>
+                            <Tooltip title="Delete">
+                                <IconButton
+                                    edge="end"
+                                    onClick={() => {
+                                        setProjectToRemoveId(project.id);
+                                        setConfirmDialogOpen(true);
+                                    }}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </ListItemIcon>
+                    </ListItem>
+                )}
+            </Draggable>
+        );
+    }
+
     return (
         <>
             <Box mt={2} mb={2}>
@@ -86,39 +170,11 @@ const AdminView = () => {
                                 Add project
                             </Button>
                         </Grid>
-                        <List style={{ width: "100%" }} disablePadding>
-                            {projectContext.projects.map((project) => {
-                                return (
-                                    <ListItem key={project.id} disableGutters>
-                                        <ListItemText
-                                            primary={project.title}
-                                        />
-                                        <ListItemSecondaryAction>
-                                            <>
-                                                <Tooltip title="Edit">
-                                                    <IconButton
-                                                        onClick={() => edit(project)}
-                                                    >
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title="Delete">
-                                                    <IconButton
-                                                        edge="end"
-                                                        onClick={() => {
-                                                            setProjectToRemoveId(project.id);
-                                                            setConfirmDialogOpen(true);
-                                                        }}
-                                                    >
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                );
-                            })}
-                        </List>
+                        {projectContext.loading ?
+                            <CircularProgress />
+                            :
+                            renderProjectList()
+                        }
                     </Grid>
                 </Grid>
             </Box>
