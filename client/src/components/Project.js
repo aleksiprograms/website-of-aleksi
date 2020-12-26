@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
         float: "left",
         borderRadius: 8,
         marginRight: 8,
+        marginBottom: 8,
     },
     imageLandscape: {
         [theme.breakpoints.up('xs')]: {
@@ -61,8 +62,8 @@ const Project = ({ project }) => {
     }
 
     return (
-        <Box mb={2}>
-            <Box mb={0.2}>
+        <>
+            <Box mb={0.3}>
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item>
                         <Typography variant="h5">
@@ -70,35 +71,45 @@ const Project = ({ project }) => {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Link href={project.githubUrl} target="_blank">
+                        <Link
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
                             Github
                         </Link>
                     </Grid>
                 </Grid>
             </Box>
-            <Box mb={0.2}>
-                <Grid container>
-                    <Box mr={0.5}>
-                        <Typography style={{ fontWeight: "bold" }}>
-                            Platforms:
-                        </Typography>
-                    </Box>
-                    <Typography style={{ fontStyle: "italic" }}>
-                        {project.platforms}
-                    </Typography>
-                </Grid>
+            <Box mb={0.3}>
+                <Typography
+                    display="inline"
+                    style={{ fontWeight: "bold" }}
+                >
+                    Platforms:
+                </Typography>
+                <Typography
+                    color="secondary"
+                    display="inline"
+                    style={{ fontStyle: "italic" }}
+                >
+                    {` ${project.platforms}`}
+                </Typography>
             </Box>
-            <Box mb={0.2}>
-                <Grid container>
-                    <Box mr={0.5}>
-                        <Typography style={{ fontWeight: "bold" }}>
-                            Technologies:
-                        </Typography>
-                    </Box>
-                    <Typography style={{ fontStyle: "italic" }}>
-                        {project.technologies}
-                    </Typography>
-                </Grid>
+            <Box mb={0.3}>
+                <Typography
+                    display="inline"
+                    style={{ fontWeight: "bold" }}
+                >
+                    Technologies:
+                </Typography>
+                <Typography
+                    color="secondary"
+                    display="inline"
+                    style={{ fontStyle: "italic" }}
+                >
+                    {` ${project.technologies}`}
+                </Typography>
             </Box>
             <Box>
                 <Grid item container>
@@ -110,7 +121,7 @@ const Project = ({ project }) => {
                     </div>
                 </Grid>
             </Box>
-        </Box>
+        </>
     );
 }
 

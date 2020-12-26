@@ -3,6 +3,7 @@ import {
     Box,
     Typography,
     Link,
+    Divider,
 } from '@material-ui/core';
 import { ProjectContext } from '../context/ProjectContext';
 import Project from '../components/Project';
@@ -25,6 +26,7 @@ const ProjectsView = () => {
                     You can check my <Link
                         href="https://github.com/aleksiprograms"
                         target="_blank"
+                        rel="noreferrer"
                     >
                         Github profile
                     </Link> to see the rest of my projects.
@@ -32,10 +34,15 @@ const ProjectsView = () => {
             </Box>
             {projectContext.projects.map((project) => {
                 return (
-                    <Project
-                        key={project.id}
-                        project={project}
-                    />
+                    <>
+                        <Divider />
+                        <Box mt={2} mb={2}>
+                            <Project
+                                key={project.id}
+                                project={project}
+                            />
+                        </Box>
+                    </>
                 );
             })}
         </Box>
