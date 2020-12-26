@@ -63,7 +63,7 @@ const CreateView = () => {
         <Box mt={2} mb={2}>
             <Grid container spacing={2}>
                 <Grid item container>
-                    <Typography variant="h4">
+                    <Typography variant="h5">
                         {title}
                     </Typography>
                 </Grid>

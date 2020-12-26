@@ -9,9 +9,9 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: "#111",
+        color: "#fff",
     },
     text: {
-        color: "#fff",
         paddingTop: 10,
         paddingBottom: 10,
     },
@@ -28,6 +28,7 @@ const Footer = () => {
                     <Typography
                         variant="caption"
                         align="center"
+                        color="inherit"
                         className={classes.text}
                     >
                         Copyright &copy; 2020 - {new Date().getFullYear()} Aleksi Tolvanen, All Rights Reserved
