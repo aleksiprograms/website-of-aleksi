@@ -33,13 +33,13 @@ const HomeView = () => {
             <Grid container spacing={2}>
                 <Grid item container justify="center">
                     <Typography variant="h4">
-                        Hey, I am Aleksi
+                        Hey, I’m Aleksi
                     </Typography>
                 </Grid>
                 <Grid item container justify="center">
                     <Typography variant="h6" align="center">
-                        I am mainly self-taught programmer/developer and
-                        I am interested in mobiledev, webdev and gamedev.
+                        I’m mainly self-taught programmer/developer and
+                        I’m interested in game, mobile and web development.
                     </Typography>
                 </Grid>
                 <Grid item container justify="center">
