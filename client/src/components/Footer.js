@@ -31,7 +31,7 @@ const Footer = () => {
                         color="inherit"
                         className={classes.text}
                     >
-                        Copyright &copy; 2020 - {new Date().getFullYear()} Aleksi Tolvanen, All Rights Reserved
+                        Copyright &copy; 2020{new Date().getFullYear() != 2020 ? " - " + new Date().getFullYear() : ""} Aleksi Tolvanen, All Rights Reserved
                     </Typography>
                 </Grid>
             </Container>
