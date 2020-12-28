@@ -21,15 +21,14 @@ const ProjectsView = () => {
             </Box>
             <Box mb={2}>
                 <Typography>
-                    Here are descriptions of my most interesting personal projects,
-                    their Github links and what technologies I use in them.
-                    You can check my <Link
+                    Here are my most interesting personal projects.
+                    Here is a link to my <Link
                         href="https://github.com/aleksiprograms"
                         target="_blank"
                         rel="noreferrer"
                     >
-                        Github profile
-                    </Link> to see the rest of my projects.
+                        GitHub profile
+                    </Link>.
                 </Typography>
             </Box>
             {projectContext.projects.map((project) => {

@@ -76,7 +76,7 @@ const Project = ({ project }) => {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            Github
+                            GitHub
                         </Link>
                     </Grid>
                 </Grid>

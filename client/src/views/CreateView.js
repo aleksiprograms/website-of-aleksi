@@ -127,7 +127,7 @@ const CreateView = () => {
                 </Grid>
                 <Grid item container>
                     <TextField
-                        label="Github Url"
+                        label="GitHub Url"
                         value={project.githubUrl}
                         onChange={(event) => {
                             event.persist();
