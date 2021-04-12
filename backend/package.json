@@ -1,12 +1,11 @@
 {
-    "name": "website-of-aleksi",
+    "name": "website-of-aleksi-backend",
     "version": "1.0.0",
     "description": "",
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
-        "watch": "nodemon server.js",
-        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+        "watch": "nodemon server.js"
     },
     "author": "Aleksi",
     "license": "ISC",
