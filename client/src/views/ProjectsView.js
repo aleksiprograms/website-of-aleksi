@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import {
     Box,
+    Grid,
     Typography,
     Link,
-    Divider,
 } from '@material-ui/core';
 import { ProjectContext } from '../context/ProjectContext';
-import Project from '../components/Project';
+import ProjectCard from '../components/ProjectCard';
 
 const ProjectsView = () => {
 
@@ -31,19 +31,16 @@ const ProjectsView = () => {
                     </Link>.
                 </Typography>
             </Box>
-            {projectContext.projects.map((project) => {
-                return (
-                    <>
-                        <Divider />
-                        <Box mt={2} mb={2}>
-                            <Project
-                                key={project.id}
-                                project={project}
-                            />
-                        </Box>
-                    </>
-                );
-            })}
+            <Grid container spacing={2}>
+                {projectContext.projects.map((project) => {
+                    return (
+                        <ProjectCard
+                            key={project.id}
+                            project={project}
+                        />
+                    );
+                })}
+            </Grid>
         </Box>
     );
 };
