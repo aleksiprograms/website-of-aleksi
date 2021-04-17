@@ -1,30 +1,24 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-    Box,
-    Grid,
-    Typography,
-    Button,
-} from '@material-ui/core';
+import { Box, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     image: {
         borderRadius: 8,
         [theme.breakpoints.up('xs')]: {
-            width: "100%",
+            width: '100%',
         },
         [theme.breakpoints.up('sm')]: {
-            width: "85%",
+            width: '85%',
         },
         [theme.breakpoints.up('md')]: {
-            width: "70%",
+            width: '70%',
         },
     },
 }));
 
 const HomeView = () => {
-
     const classes = useStyles();
     const history = useHistory();
 
@@ -32,21 +26,19 @@ const HomeView = () => {
         <Box mt={2} mb={2}>
             <Grid container spacing={2}>
                 <Grid item container justify="center">
-                    <Typography variant="h4">
-                        Hey, I’m Aleksi
-                    </Typography>
+                    <Typography variant="h4">Hey, I’m Aleksi</Typography>
                 </Grid>
                 <Grid item container justify="center">
                     <Typography variant="h6" align="center">
-                        I’m mainly self-taught programmer/developer and
-                        I’m interested in game, mobile and web development.
+                        I’m mainly self-taught programmer/developer and I’m
+                        interested in game, mobile and web development.
                     </Typography>
                 </Grid>
                 <Grid item container justify="center">
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => history.push("/projects")}
+                        onClick={() => history.push('/projects')}
                     >
                         Projects
                     </Button>
@@ -61,6 +53,6 @@ const HomeView = () => {
             </Grid>
         </Box>
     );
-}
+};
 
 export default HomeView;

@@ -16,36 +16,33 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 8,
     },
     image: {
-        float: "left",
+        float: 'left',
         borderRadius: 8,
         marginRight: 12,
     },
     imageLandscape: {
         [theme.breakpoints.down('sm')]: {
-            width: "100%",
+            width: '100%',
             marginBottom: 12,
         },
         [theme.breakpoints.up('sm')]: {
-            width: "50%",
+            width: '50%',
             marginBottom: 0,
         },
     },
     imagePortrait: {
-        width: "50%",
+        width: '50%',
     },
 }));
 
 const ProjectCard = (props) => {
-
-    const {
-        project,
-    } = props;
+    const { project } = props;
 
     const classes = useStyles();
 
     const renderImage = () => {
         switch (project.imageOrientation) {
-            case "landscape":
+            case 'landscape':
                 return (
                     <img
                         src={project.imageUrl}
@@ -53,7 +50,7 @@ const ProjectCard = (props) => {
                         className={`${classes.image} ${classes.imageLandscape}`}
                     />
                 );
-            case "portrait":
+            case 'portrait':
                 return (
                     <img
                         src={project.imageUrl}
@@ -61,19 +58,19 @@ const ProjectCard = (props) => {
                         className={`${classes.image} ${classes.imagePortrait}`}
                     />
                 );
-            case "none":
-                return (null);
+            case 'none':
+                return null;
             default:
-                return (null);
+                return null;
         }
-    }
+    };
 
     const renderTags = () => {
         const platforms = project.platforms.split(', ');
         const technologies = project.technologies.split(', ');
         return (
             <>
-                {platforms.map(platform => {
+                {platforms.map((platform) => {
                     return (
                         <Chip
                             label={platform}
@@ -84,7 +81,7 @@ const ProjectCard = (props) => {
                         />
                     );
                 })}
-                {technologies.map(technology => {
+                {technologies.map((technology) => {
                     return (
                         <Chip
                             label={technology}
@@ -97,28 +94,24 @@ const ProjectCard = (props) => {
                 })}
             </>
         );
-    }
+    };
 
     return (
         <Grid
             item
             xs={12}
-            sm={project.imageOrientation === "portrait" ? 6 : 12}
-            style={{ flexGrow: 1, height: "100%" }}
+            sm={project.imageOrientation === 'portrait' ? 6 : 12}
+            style={{ flexGrow: 1, height: '100%' }}
         >
-            <Paper variant="outlined" style={{ height: "100%" }}>
+            <Paper variant="outlined" style={{ height: '100%' }}>
                 <Box m={1.5}>
                     <Box mt={-0.5} mb={0.5}>
-                        <Typography variant="h5">
-                            {project.title}
-                        </Typography>
+                        <Typography variant="h5">{project.title}</Typography>
                     </Box>
                     <div>
                         {renderImage()}
                         {renderTags()}
-                        <Typography>
-                            {project.text}
-                        </Typography>
+                        <Typography>{project.text}</Typography>
                     </div>
                     <Grid item container justify="flex-end">
                         <Box mt={1}>
@@ -140,8 +133,8 @@ const ProjectCard = (props) => {
                     </Grid>
                 </Box>
             </Paper>
-        </Grid >
+        </Grid>
     );
-}
+};
 
 export default ProjectCard;

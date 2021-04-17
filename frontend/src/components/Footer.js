@@ -1,15 +1,11 @@
 import React from 'react';
-import {
-    Container,
-    Grid,
-    Typography,
-} from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
-        backgroundColor: "#111",
-        color: "#fff",
+        backgroundColor: '#111',
+        color: '#fff',
     },
     text: {
         paddingTop: 10,
@@ -18,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Footer = () => {
-
     const classes = useStyles();
 
     return (
@@ -31,12 +26,16 @@ const Footer = () => {
                         color="inherit"
                         className={classes.text}
                     >
-                        Copyright &copy; 2020{new Date().getFullYear() != 2020 ? " - " + new Date().getFullYear() : ""} Aleksi Tolvanen, All Rights Reserved
+                        Copyright &copy; 2020
+                        {new Date().getFullYear() !== 2020
+                            ? ' - ' + new Date().getFullYear()
+                            : ''}{' '}
+                        Aleksi Tolvanen, All Rights Reserved
                     </Typography>
                 </Grid>
             </Container>
         </div>
     );
-}
+};
 
 export default Footer;

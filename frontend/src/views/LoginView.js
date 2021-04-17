@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Redirect } from "react-router-dom";
-import {
-    Box,
-    Grid,
-    Typography,
-    Button,
-    TextField,
-} from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
+import { Box, Grid, Typography, Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { UserContext } from '../context/UserContext';
 import useUserApi from '../hooks/useUserApi';
@@ -14,19 +8,18 @@ import useUserApi from '../hooks/useUserApi';
 const useStyles = makeStyles((theme) => ({
     field: {
         [theme.breakpoints.up('xs')]: {
-            width: "60%",
+            width: '60%',
         },
         [theme.breakpoints.up('sm')]: {
-            width: "50%",
+            width: '50%',
         },
         [theme.breakpoints.up('md')]: {
-            width: "40%",
+            width: '40%',
         },
     },
 }));
 
 const LoginView = () => {
-
     const classes = useStyles();
     const userContext = useContext(UserContext);
     const userApi = useUserApi();
@@ -41,31 +34,27 @@ const LoginView = () => {
     }, [userContext.error]);
 
     if (userContext.user != null) {
-        return (
-            <Redirect to="/admin" />
-        );
+        return <Redirect to="/admin" />;
     }
 
     const login = () => {
-        setError("");
+        setError('');
         userApi.login(username, password);
-    }
+    };
 
     return (
         <Box mt={10} mb={2}>
             <Grid container spacing={2}>
                 <Grid item container justify="center">
-                    <Typography variant="h5">
-                        Admin login
-                    </Typography>
+                    <Typography variant="h5">Admin login</Typography>
                 </Grid>
-                {error &&
+                {error && (
                     <Grid item container justify="center">
-                        <Typography style={{ color: "#f00" }}>
+                        <Typography style={{ color: '#f00' }}>
                             {error}
                         </Typography>
                     </Grid>
-                }
+                )}
                 <Grid item container justify="center">
                     <TextField
                         label="Username"
@@ -89,17 +78,13 @@ const LoginView = () => {
                     />
                 </Grid>
                 <Grid item container justify="center">
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={login}
-                    >
+                    <Button variant="contained" color="primary" onClick={login}>
                         Login
                     </Button>
                 </Grid>
             </Grid>
         </Box>
     );
-}
+};
 
 export default LoginView;

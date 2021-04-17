@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const { Client } = require('pg');
+require('dotenv').config();
 
 // Table of database creation
 /*
@@ -12,45 +13,35 @@ CREATE TABLE users (
 );
 */
 
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
-
 const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: {
-        rejectUnauthorized: false
-    }
+        rejectUnauthorized: false,
+    },
 });
 client.connect();
 
 router.post('/', async (request, response) => {
-    const body = request.body;
+    const { body } = request;
     let user = null;
-    let res = await client.query('SELECT * FROM Users');
-    for (let row of res.rows) {
-        if (row.username === body.username) {
-            user = row;
-            break;
-        }
-    }
+    const { rows } = await client.query('SELECT * FROM Users');
+    user = rows.find((row) => row.username === body.username);
 
-    const passwordCorrect = user === null
-        ? false
-        : await bcryptjs.compare(body.password, user.password);
+    const passwordCorrect =
+        user != null
+            ? await bcryptjs.compare(body.password, user.password)
+            : false;
 
     if (!(user && passwordCorrect)) {
         return response.status(401).json({
-            error: 'invalid username or password'
+            error: 'invalid username or password',
         });
     }
 
     const userForToken = { username: user.username };
     const token = jwt.sign(userForToken, process.env.JWT_SECRET);
 
-    response
-        .status(200)
-        .json({ token, username: user.username });
+    response.status(200).json({ token, username: user.username });
 });
 
 module.exports = router;

@@ -1,13 +1,10 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import {
-    CssBaseline,
-    Container,
-} from '@material-ui/core';
+import { CssBaseline, Container } from '@material-ui/core';
 import {
     createMuiTheme,
     makeStyles,
-    ThemeProvider
+    ThemeProvider,
 } from '@material-ui/core/styles';
 import { UserProvider } from './context/UserContext';
 import { ProjectProvider } from './context/ProjectContext';
@@ -21,11 +18,11 @@ import AdminView from './views/AdminView';
 import LoginView from './views/LoginView';
 import CreateView from './views/CreateView';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
     },
     content: {
         flex: 1,
@@ -44,7 +41,6 @@ const theme = createMuiTheme({
 });
 
 const Initializer = ({ children }) => {
-
     const userApi = useUserApi();
     const projectApi = useProjectApi();
 
@@ -53,15 +49,10 @@ const Initializer = ({ children }) => {
         projectApi.getProjects();
     }, []);
 
-    return (
-        <>
-            {children}
-        </>
-    );
-}
+    return <>{children}</>;
+};
 
 const App = () => {
-
     const classes = useStyles();
 
     return (
@@ -73,12 +64,31 @@ const App = () => {
                             <div className={classes.root}>
                                 <CssBaseline />
                                 <Header />
-                                <Container maxWidth="md" className={classes.content}>
-                                    <Route exact path="/" component={HomeView} />
-                                    <Route path="/projects" component={ProjectsView} />
-                                    <Route path="/admin" component={AdminView} />
-                                    <Route path="/login" component={LoginView} />
-                                    <Route path="/create" component={CreateView} />
+                                <Container
+                                    maxWidth="md"
+                                    className={classes.content}
+                                >
+                                    <Route
+                                        exact
+                                        path="/"
+                                        component={HomeView}
+                                    />
+                                    <Route
+                                        path="/projects"
+                                        component={ProjectsView}
+                                    />
+                                    <Route
+                                        path="/admin"
+                                        component={AdminView}
+                                    />
+                                    <Route
+                                        path="/login"
+                                        component={LoginView}
+                                    />
+                                    <Route
+                                        path="/create"
+                                        component={CreateView}
+                                    />
                                 </Container>
                                 <Footer />
                             </div>
@@ -88,6 +98,6 @@ const App = () => {
             </UserProvider>
         </BrowserRouter>
     );
-}
+};
 
 export default App;

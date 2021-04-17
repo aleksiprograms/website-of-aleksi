@@ -16,10 +16,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import MenuIcon from '@material-ui/icons/Menu';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
-        backgroundColor: "#111",
-        color: "#fff",
+        backgroundColor: '#111',
+        color: '#fff',
     },
     title: {
         flexGrow: 1,
@@ -27,16 +27,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header = () => {
-
-    const isOnMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isOnMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
     const classes = useStyles();
     const history = useHistory();
     const location = useLocation();
 
     const [navigations, setNavigations] = useState([
-        { title: "Home", path: "/", active: false },
-        { title: "Projects", path: "/projects", active: false }
+        { title: 'Home', path: '/', active: false },
+        { title: 'Projects', path: '/projects', active: false },
     ]);
     const [openMenuOnMobile, setOpenMenuOnMobile] = useState(false);
 
@@ -47,8 +46,8 @@ const Header = () => {
     }, [isOnMobile]);
 
     useEffect(() => {
-        setNavigations(prevNavigations => {
-            return prevNavigations.map(prevNavigation => {
+        setNavigations((prevNavigations) => {
+            return prevNavigations.map((prevNavigation) => {
                 if (prevNavigation.path === location.pathname) {
                     return {
                         ...prevNavigation,
@@ -71,7 +70,7 @@ const Header = () => {
                     return (
                         <Button
                             key={navigation.path}
-                            color={navigation.active ? "primary" : "inherit"}
+                            color={navigation.active ? 'primary' : 'inherit'}
                             onClick={() => {
                                 setOpenMenuOnMobile(false);
                                 history.push(navigation.path);
@@ -83,7 +82,7 @@ const Header = () => {
                 })}
             </>
         );
-    }
+    };
 
     return (
         <AppBar position="static" className={classes.root}>
@@ -94,19 +93,19 @@ const Header = () => {
                             Website of Aleksi
                         </Link>
                     </Typography>
-                    {isOnMobile ?
+                    {isOnMobile ? (
                         <IconButton
                             edge="end"
                             color="inherit"
-                            onClick={() => setOpenMenuOnMobile(prevState => !prevState)}
+                            onClick={() =>
+                                setOpenMenuOnMobile((prevState) => !prevState)
+                            }
                         >
                             <MenuIcon />
                         </IconButton>
-                        :
-                        <>
-                            {renderNavigation()}
-                        </>
-                    }
+                    ) : (
+                        <>{renderNavigation()}</>
+                    )}
                 </Toolbar>
                 <Collapse in={openMenuOnMobile} timeout="auto" unmountOnExit>
                     <Box mb={1}>
@@ -123,6 +122,6 @@ const Header = () => {
             </Container>
         </AppBar>
     );
-}
+};
 
 export default Header;

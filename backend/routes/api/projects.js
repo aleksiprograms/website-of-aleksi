@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const { Client } = require('pg');
+require('dotenv').config();
 
 // Table of database creation
 /*
@@ -17,17 +18,21 @@ CREATE TABLE projects (
 );
 */
 
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
-
 const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: {
-        rejectUnauthorized: false
-    }
+        rejectUnauthorized: false,
+    },
 });
 client.connect();
+
+const getTokenFrom = (request) => {
+    const authorization = request.get('authorization');
+    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+        return authorization.substring(7);
+    }
+    return null;
+};
 
 const isAuthorized = (request) => {
     const token = getTokenFrom(request);
@@ -36,124 +41,120 @@ const isAuthorized = (request) => {
         return false;
     }
     return true;
-}
-
-const getTokenFrom = (request) => {
-    const authorization = request.get('authorization');
-    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-        return authorization.substring(7);
-    }
-    return null;
-}
+};
 
 router.get('/', (request, response) => {
-    client.query('SELECT * FROM projects ORDER BY placeinprojects ASC')
+    client
+        .query('SELECT * FROM projects ORDER BY placeinprojects ASC')
         .then((result) => {
-            let projects = [];
-            for (let row of result.rows) {
-                projects.push({
-                    id: row.id,
-                    title: row.title,
-                    text: row.text,
-                    platforms: row.platforms,
-                    technologies: row.technologies,
-                    githubUrl: row.githuburl,
-                    imageUrl: row.imageurl,
-                    imageOrientation: row.imageorientation,
-                    placeInProjects: row.placeinprojects
-                });
-            }
+            const { rows } = result;
+            const projects = rows.map((row) => ({
+                id: row.id,
+                title: row.title,
+                text: row.text,
+                platforms: row.platforms,
+                technologies: row.technologies,
+                githubUrl: row.githuburl,
+                imageUrl: row.imageurl,
+                imageOrientation: row.imageorientation,
+                placeInProjects: row.placeinprojects,
+            }));
             response.status(200).json(projects);
         })
-        .catch((error) => {
+        .catch(() => {
             response.sendStatus(400);
-        })
+        });
 });
 
 router.post('/', (request, response) => {
     if (!isAuthorized(request)) {
         return response.status(401).json({ error: 'token missing or invalid' });
     }
-    const body = request.body;
-    client.query(
-        'INSERT INTO projects '
-        + '('
-        + 'title, '
-        + 'text, '
-        + 'platforms, '
-        + 'technologies, '
-        + 'githuburl, '
-        + 'imageurl, '
-        + 'imageorientation, '
-        + 'placeinprojects'
-        + ') '
-        + 'VALUES($1, $2, $3, $4, $5, $6, $7, $8)'
-        + 'RETURNING id',
-        [
-            body.title,
-            body.text,
-            body.platforms,
-            body.technologies,
-            body.githubUrl,
-            body.imageUrl,
-            body.imageOrientation,
-            body.placeInProjects
-        ])
+    const { body } = request;
+    client
+        .query(
+            'INSERT INTO projects ' +
+                '(' +
+                'title, ' +
+                'text, ' +
+                'platforms, ' +
+                'technologies, ' +
+                'githuburl, ' +
+                'imageurl, ' +
+                'imageorientation, ' +
+                'placeinprojects' +
+                ') ' +
+                'VALUES($1, $2, $3, $4, $5, $6, $7, $8)' +
+                'RETURNING id',
+            [
+                body.title,
+                body.text,
+                body.platforms,
+                body.technologies,
+                body.githubUrl,
+                body.imageUrl,
+                body.imageOrientation,
+                body.placeInProjects,
+            ]
+        )
         .then((result) => {
             response.status(200).json({ id: result.rows[0].id });
         })
-        .catch((error) => {
+        .catch(() => {
             response.sendStatus(400);
-        })
+        });
 });
 
 router.put('/:id', (request, response) => {
     if (!isAuthorized(request)) {
         return response.status(401).json({ error: 'token missing or invalid' });
     }
-    const body = request.body;
-    client.query(
-        'UPDATE projects '
-        + 'SET '
-        + 'title = $1, '
-        + 'text = $2, '
-        + 'platforms = $3, '
-        + 'technologies = $4, '
-        + 'githuburl = $5, '
-        + 'imageurl = $6, '
-        + 'imageorientation = $7, '
-        + 'placeinprojects = $8 '
-        + 'WHERE id = $9',
-        [
-            body.title,
-            body.text,
-            body.platforms,
-            body.technologies,
-            body.githubUrl,
-            body.imageUrl,
-            body.imageOrientation,
-            body.placeInProjects,
-            request.params.id
-        ])
+    const { body } = request;
+    client
+        .query(
+            'UPDATE projects ' +
+                'SET ' +
+                'title = $1, ' +
+                'text = $2, ' +
+                'platforms = $3, ' +
+                'technologies = $4, ' +
+                'githuburl = $5, ' +
+                'imageurl = $6, ' +
+                'imageorientation = $7, ' +
+                'placeinprojects = $8 ' +
+                'WHERE id = $9',
+            [
+                body.title,
+                body.text,
+                body.platforms,
+                body.technologies,
+                body.githubUrl,
+                body.imageUrl,
+                body.imageOrientation,
+                body.placeInProjects,
+                request.params.id,
+            ]
+        )
         .then(() => {
             response.sendStatus(200);
         })
-        .catch((error) => {
+        .catch(() => {
             response.sendStatus(400);
-        })
+        });
 });
 
 router.delete('/:id', (request, response) => {
     if (!isAuthorized(request)) {
         return response.status(401).json({ error: 'token missing or invalid' });
     }
-    client.query('DELETE FROM projects WHERE id = $1', [request.params.id])
+    client
+        .query('DELETE FROM projects WHERE id = $1', [request.params.id])
         .then(() => {
             response.sendStatus(200);
         })
-        .catch((error) => {
+        .catch(() => {
             response.sendStatus(400);
-        })
+        });
 });
 
 module.exports = router;

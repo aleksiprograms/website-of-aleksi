@@ -22,7 +22,26 @@
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
-        "extends": "react-app"
+        "extends": [
+            "react-app",
+            "plugin:prettier/recommended"
+        ],
+        "rules": {
+            "no-unused-vars": [
+                "warn",
+                {
+                    "vars": "all",
+                    "args": "all"
+                }
+            ],
+            "useTabs": 0,
+            "prettier/prettier": [
+                "error",
+                {
+                    "endOfLine": "auto"
+                }
+            ]
+        }
     },
     "browserslist": {
         "production": [
@@ -36,5 +55,10 @@
             "last 1 safari version"
         ]
     },
-    "proxy": "http://localhost:5000"
+    "proxy": "http://localhost:5000",
+    "devDependencies": {
+        "eslint-config-prettier": "^8.1.0",
+        "eslint-plugin-prettier": "^3.3.1",
+        "prettier": "^2.2.1"
+    }
 }

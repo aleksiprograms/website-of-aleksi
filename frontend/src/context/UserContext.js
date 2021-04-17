@@ -2,7 +2,8 @@ import React, { createContext, useState } from 'react';
 
 const UserContext = createContext();
 
-const UserProvider = ({ children }) => {
+const UserProvider = (props) => {
+    const { children } = props;
 
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
@@ -12,12 +13,10 @@ const UserProvider = ({ children }) => {
         setUser,
         error,
         setError,
-    }
+    };
 
     return (
-        <UserContext.Provider value={values}>
-            {children}
-        </UserContext.Provider>
+        <UserContext.Provider value={values}>{children}</UserContext.Provider>
     );
 };
 

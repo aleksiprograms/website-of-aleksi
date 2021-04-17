@@ -4,7 +4,6 @@ const path = require('path');
 
 const projects = require('./routes/api/projects');
 const login = require('./routes/api/login');
-const { request, response } = require('express');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,7 +14,9 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'production') {
     app.use((request, response, next) => {
         if (request.header('x-forwarded-proto') !== 'https') {
-            response.redirect(`https://${request.header('host')}${request.url}`);
+            response.redirect(
+                `https://${request.header('host')}${request.url}`
+            );
         } else {
             next();
         }
@@ -28,7 +29,9 @@ app.use('/api/login', login);
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
     app.get('*', (request, response) => {
-        response.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+        response.sendFile(
+            path.resolve(__dirname, 'client', 'build', 'index.html')
+        );
     });
 }
 

@@ -1,21 +1,19 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 
 const ProjectContext = createContext();
 
-const ProjectProvider = ({ children }) => {
+const ProjectProvider = (props) => {
+    const { children } = props;
 
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-    }, []);
 
     let values = {
         projects,
         setProjects,
         loading,
         setLoading,
-    }
+    };
 
     return (
         <ProjectContext.Provider value={values}>

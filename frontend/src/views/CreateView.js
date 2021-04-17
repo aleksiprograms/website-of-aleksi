@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Redirect, useHistory, useLocation } from "react-router-dom";
+import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import {
     Box,
     Grid,
@@ -15,12 +15,11 @@ import { UserContext } from '../context/UserContext';
 import useProjectApi from '../hooks/useProjectApi';
 
 const CreateView = () => {
-
     const location = useLocation();
     const history = useHistory();
     const userContext = useContext(UserContext);
     const projectApi = useProjectApi();
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState('');
     const [project, setProject] = useState({
         title: '',
         text: '',
@@ -33,17 +32,15 @@ const CreateView = () => {
 
     useEffect(() => {
         if (location.state != null) {
-            setTitle("Edit project");
+            setTitle('Edit project');
             setProject(location.state.project);
         } else {
-            setTitle("Add project");
+            setTitle('Add project');
         }
     }, [location.state]);
 
     if (userContext.user == null) {
-        return (
-            <Redirect to="/login" />
-        );
+        return <Redirect to="/login" />;
     }
 
     const submit = () => {
@@ -52,20 +49,18 @@ const CreateView = () => {
         } else {
             projectApi.addProject(project);
         }
-        history.push("/admin");
-    }
+        history.push('/admin');
+    };
 
     const cancel = () => {
-        history.push("/admin");
-    }
+        history.push('/admin');
+    };
 
     return (
         <Box mt={2} mb={2}>
             <Grid container spacing={2}>
                 <Grid item container>
-                    <Typography variant="h5">
-                        {title}
-                    </Typography>
+                    <Typography variant="h5">{title}</Typography>
                 </Grid>
                 <Grid item container>
                     <TextField
@@ -73,8 +68,11 @@ const CreateView = () => {
                         value={project.title}
                         onChange={(event) => {
                             event.persist();
-                            setProject(prevState => {
-                                return { ...prevState, title: event.target.value }
+                            setProject((prevState) => {
+                                return {
+                                    ...prevState,
+                                    title: event.target.value,
+                                };
                             });
                         }}
                         fullWidth
@@ -88,8 +86,11 @@ const CreateView = () => {
                         value={project.text}
                         onChange={(event) => {
                             event.persist();
-                            setProject(prevState => {
-                                return { ...prevState, text: event.target.value }
+                            setProject((prevState) => {
+                                return {
+                                    ...prevState,
+                                    text: event.target.value,
+                                };
                             });
                         }}
                         fullWidth
@@ -103,8 +104,11 @@ const CreateView = () => {
                         value={project.platforms}
                         onChange={(event) => {
                             event.persist();
-                            setProject(prevState => {
-                                return { ...prevState, platforms: event.target.value }
+                            setProject((prevState) => {
+                                return {
+                                    ...prevState,
+                                    platforms: event.target.value,
+                                };
                             });
                         }}
                         fullWidth
@@ -117,8 +121,11 @@ const CreateView = () => {
                         value={project.technologies}
                         onChange={(event) => {
                             event.persist();
-                            setProject(prevState => {
-                                return { ...prevState, technologies: event.target.value }
+                            setProject((prevState) => {
+                                return {
+                                    ...prevState,
+                                    technologies: event.target.value,
+                                };
                             });
                         }}
                         fullWidth
@@ -131,8 +138,11 @@ const CreateView = () => {
                         value={project.githubUrl}
                         onChange={(event) => {
                             event.persist();
-                            setProject(prevState => {
-                                return { ...prevState, githubUrl: event.target.value }
+                            setProject((prevState) => {
+                                return {
+                                    ...prevState,
+                                    githubUrl: event.target.value,
+                                };
                             });
                         }}
                         fullWidth
@@ -145,17 +155,29 @@ const CreateView = () => {
                         value={project.imageUrl}
                         onChange={(event) => {
                             event.persist();
-                            setProject(prevState => {
-                                return { ...prevState, imageUrl: event.target.value }
+                            setProject((prevState) => {
+                                return {
+                                    ...prevState,
+                                    imageUrl: event.target.value,
+                                };
                             });
-                            if (event.target.value === "") {
-                                setProject(prevState => {
-                                    return { ...prevState, imageOrientation: 'none' }
+                            if (event.target.value === '') {
+                                setProject((prevState) => {
+                                    return {
+                                        ...prevState,
+                                        imageOrientation: 'none',
+                                    };
                                 });
                             }
-                            if (event.target.value !== "" && project.imageOrientation === 'none') {
-                                setProject(prevState => {
-                                    return { ...prevState, imageOrientation: 'landscape' }
+                            if (
+                                event.target.value !== '' &&
+                                project.imageOrientation === 'none'
+                            ) {
+                                setProject((prevState) => {
+                                    return {
+                                        ...prevState,
+                                        imageOrientation: 'landscape',
+                                    };
                                 });
                             }
                         }}
@@ -163,7 +185,7 @@ const CreateView = () => {
                         variant="outlined"
                     />
                 </Grid>
-                {project?.imageUrl?.length > 0 &&
+                {project?.imageUrl?.length > 0 && (
                     <Grid item container>
                         <FormControl variant="outlined" fullWidth>
                             <InputLabel>Image Orientation</InputLabel>
@@ -172,8 +194,12 @@ const CreateView = () => {
                                 label="Image Orientation"
                                 onChange={(event) => {
                                     event.persist();
-                                    setProject(prevState => {
-                                        return { ...prevState, imageOrientation: event.target.value }
+                                    setProject((prevState) => {
+                                        return {
+                                            ...prevState,
+                                            imageOrientation:
+                                                event.target.value,
+                                        };
                                     });
                                 }}
                             >
@@ -182,7 +208,7 @@ const CreateView = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                }
+                )}
                 <Grid item container justify="center" spacing={2}>
                     <Grid item>
                         <Button
@@ -206,6 +232,6 @@ const CreateView = () => {
             </Grid>
         </Box>
     );
-}
+};
 
 export default CreateView;
