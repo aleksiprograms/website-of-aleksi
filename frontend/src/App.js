@@ -8,7 +8,6 @@ import {
 } from '@material-ui/core/styles';
 import { UserProvider } from './context/UserContext';
 import { ProjectProvider } from './context/ProjectContext';
-import useUserApi from './hooks/useUserApi';
 import useProjectApi from './hooks/useProjectApi';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -41,11 +40,9 @@ const theme = createMuiTheme({
 });
 
 const Initializer = ({ children }) => {
-    const userApi = useUserApi();
     const projectApi = useProjectApi();
 
     useEffect(() => {
-        userApi.initIfSaved();
         projectApi.getProjects();
     }, []);
 

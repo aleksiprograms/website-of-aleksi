@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 
 const projects = require('./routes/api/projects');
-const login = require('./routes/api/login');
+const users = require('./routes/api/users');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use('/api/projects', projects);
-app.use('/api/login', login);
+app.use('/api/users', users);
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));

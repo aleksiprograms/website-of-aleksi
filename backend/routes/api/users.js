@@ -21,7 +21,7 @@ const client = new Client({
 });
 client.connect();
 
-router.post('/', async (request, response) => {
+router.post('/login', async (request, response) => {
     const { body } = request;
     let user = null;
     const { rows } = await client.query('SELECT * FROM Users');
@@ -34,7 +34,7 @@ router.post('/', async (request, response) => {
 
     if (!(user && passwordCorrect)) {
         return response.status(401).json({
-            error: 'invalid username or password',
+            message: 'Invalid username or password',
         });
     }
 
@@ -42,6 +42,17 @@ router.post('/', async (request, response) => {
     const token = jwt.sign(userForToken, process.env.JWT_SECRET);
 
     response.status(200).json({ token, username: user.username });
+});
+
+router.post('/validate-token', (request, response) => {
+    const { body } = request;
+    jwt.verify(body.token, process.env.JWT_SECRET, (error) => {
+        if (error) {
+            response.sendStatus(422);
+        } else {
+            response.sendStatus(200);
+        }
+    });
 });
 
 module.exports = router;

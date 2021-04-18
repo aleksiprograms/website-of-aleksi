@@ -1,88 +1,110 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
-import { Box, Grid, Typography, Button, TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+    Box,
+    Grid,
+    Typography,
+    Button,
+    TextField,
+    CircularProgress,
+} from '@material-ui/core';
 import { UserContext } from '../context/UserContext';
 import useUserApi from '../hooks/useUserApi';
-
-const useStyles = makeStyles((theme) => ({
-    field: {
-        [theme.breakpoints.up('xs')]: {
-            width: '60%',
-        },
-        [theme.breakpoints.up('sm')]: {
-            width: '50%',
-        },
-        [theme.breakpoints.up('md')]: {
-            width: '40%',
-        },
-    },
-}));
+import AppError from '../components/AppError';
 
 const LoginView = () => {
-    const classes = useStyles();
     const userContext = useContext(UserContext);
     const userApi = useUserApi();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-
-    useEffect(() => {
-        setUsername('');
-        setPassword('');
-        setError(userContext.error);
-    }, [userContext.error]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     if (userContext.user != null) {
         return <Redirect to="/admin" />;
     }
 
     const login = () => {
-        setError('');
-        userApi.login(username, password);
+        setLoading(true);
+        setError(null);
+        userApi
+            .login(username, password)
+            .then((response) => {
+                userContext.onLogin(response.data);
+            })
+            .catch((error) => {
+                setError(error);
+            })
+            .finally(() => {
+                setLoading(false);
+                setUsername('');
+                setPassword('');
+            });
     };
 
     return (
         <Box mt={10} mb={2}>
-            <Grid container spacing={2}>
-                <Grid item container justify="center">
+            <Box mb={2}>
+                <Grid container justify="center">
                     <Typography variant="h5">Admin login</Typography>
                 </Grid>
-                {error && (
-                    <Grid item container justify="center">
-                        <Typography style={{ color: '#f00' }}>
-                            {error}
-                        </Typography>
+            </Box>
+            {loading || userContext?.authenticating ? (
+                <Grid container justify="center">
+                    <CircularProgress />
+                </Grid>
+            ) : (
+                <Grid container direction="column" alignItems="center" xs={12}>
+                    <Grid
+                        container
+                        direction="column"
+                        alignItems="center"
+                        spacing={2}
+                        xs={9}
+                        sm={7}
+                        md={5}
+                    >
+                        {error && (
+                            <Grid item container>
+                                <AppError error={error} />
+                            </Grid>
+                        )}
+                        <Grid item container>
+                            <TextField
+                                label="Username"
+                                value={username}
+                                onChange={(event) =>
+                                    setUsername(event.target.value)
+                                }
+                                fullWidth
+                                variant="outlined"
+                                autoFocus
+                            />
+                        </Grid>
+                        <Grid item container>
+                            <TextField
+                                label="Password"
+                                value={password}
+                                onChange={(event) =>
+                                    setPassword(event.target.value)
+                                }
+                                fullWidth
+                                variant="outlined"
+                                type="password"
+                            />
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={login}
+                            >
+                                Login
+                            </Button>
+                        </Grid>
                     </Grid>
-                )}
-                <Grid item container justify="center">
-                    <TextField
-                        label="Username"
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
-                        fullWidth
-                        variant="outlined"
-                        autoFocus
-                        className={classes.field}
-                    />
                 </Grid>
-                <Grid item container justify="center">
-                    <TextField
-                        label="Password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        fullWidth
-                        variant="outlined"
-                        type="password"
-                        className={classes.field}
-                    />
-                </Grid>
-                <Grid item container justify="center">
-                    <Button variant="contained" color="primary" onClick={login}>
-                        Login
-                    </Button>
-                </Grid>
-            </Grid>
+            )}
         </Box>
     );
 };

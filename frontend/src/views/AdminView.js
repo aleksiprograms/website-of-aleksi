@@ -19,7 +19,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { UserContext } from '../context/UserContext';
 import { ProjectContext } from '../context/ProjectContext';
-import useUserApi from '../hooks/useUserApi';
 import useProjectApi from '../hooks/useProjectApi';
 import ConfirmDialog from '../components/ConfirmDialog';
 
@@ -27,7 +26,6 @@ const AdminView = () => {
     const history = useHistory();
     const userContext = useContext(UserContext);
     const projectContext = useContext(ProjectContext);
-    const userApi = useUserApi();
     const projectApi = useProjectApi();
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
     const [projectToRemoveId, setProjectToRemoveId] = useState('');
@@ -37,7 +35,7 @@ const AdminView = () => {
     }
 
     const logout = () => {
-        userApi.logout();
+        userContext.onLogout();
     };
 
     const add = () => {
