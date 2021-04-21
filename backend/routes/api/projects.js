@@ -1,50 +1,9 @@
 const router = require('express').Router();
-const jwt = require('jsonwebtoken');
-const { Client } = require('pg');
-require('dotenv').config();
-
-// Table of database creation
-/*
-CREATE TABLE projects (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    text VARCHAR(3000) NOT NULL,
-    platforms VARCHAR(255) NOT NULL,
-    technologies VARCHAR(255) NOT NULL,
-    githuburl VARCHAR(255) NOT NULL,
-    imageurl VARCHAR(255),
-    imageorientation VARCHAR(255),
-    placeinprojects INTEGER NOT NULL
-);
-*/
-
-const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false,
-    },
-});
-client.connect();
-
-const getTokenFrom = (request) => {
-    const authorization = request.get('authorization');
-    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-        return authorization.substring(7);
-    }
-    return null;
-};
-
-const isAuthorized = (request) => {
-    const token = getTokenFrom(request);
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    if (!token || !decodedToken.username) {
-        return false;
-    }
-    return true;
-};
+const database = require('../../utils/database');
+const authorization = require('../../utils/authorization');
 
 router.get('/', (request, response) => {
-    client
+    database
         .query('SELECT * FROM projects ORDER BY placeinprojects ASC')
         .then((result) => {
             const { rows } = result;
@@ -67,11 +26,11 @@ router.get('/', (request, response) => {
 });
 
 router.post('/', (request, response) => {
-    if (!isAuthorized(request)) {
-        return response.status(401).json({ error: 'token missing or invalid' });
+    if (!authorization.isAuthorized(request, response)) {
+        return;
     }
     const { body } = request;
-    client
+    database
         .query(
             'INSERT INTO projects ' +
                 '(' +
@@ -106,11 +65,11 @@ router.post('/', (request, response) => {
 });
 
 router.put('/:id', (request, response) => {
-    if (!isAuthorized(request)) {
-        return response.status(401).json({ error: 'token missing or invalid' });
+    if (!authorization.isAuthorized(request, response)) {
+        return;
     }
     const { body } = request;
-    client
+    database
         .query(
             'UPDATE projects ' +
                 'SET ' +
@@ -144,10 +103,10 @@ router.put('/:id', (request, response) => {
 });
 
 router.delete('/:id', (request, response) => {
-    if (!isAuthorized(request)) {
-        return response.status(401).json({ error: 'token missing or invalid' });
+    if (!authorization.isAuthorized(request, response)) {
+        return;
     }
-    client
+    database
         .query('DELETE FROM projects WHERE id = $1', [request.params.id])
         .then(() => {
             response.sendStatus(200);
