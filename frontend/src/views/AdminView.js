@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import {
     Box,
@@ -18,17 +18,35 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { UserContext } from '../context/UserContext';
-import { ProjectContext } from '../context/ProjectContext';
 import useProjectApi from '../hooks/useProjectApi';
 import ConfirmDialog from '../components/ConfirmDialog';
+import AppError from '../components/AppError';
 
 const AdminView = () => {
     const history = useHistory();
     const userContext = useContext(UserContext);
-    const projectContext = useContext(ProjectContext);
     const projectApi = useProjectApi();
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
     const [projectToRemoveId, setProjectToRemoveId] = useState('');
+
+    useEffect(() => {
+        setLoading(true);
+        setError(null);
+        projectApi
+            .getProjects()
+            .then((result) => {
+                setProjects(result.data);
+            })
+            .catch((error) => {
+                setError(error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, []);
 
     if (userContext.user == null) {
         return <Redirect to="/login" />;
@@ -43,20 +61,58 @@ const AdminView = () => {
     };
 
     const edit = (project) => {
-        history.push({
-            pathname: '/create',
-            state: { project },
-        });
+        history.push('/create/' + project.id);
     };
 
     const remove = () => {
-        projectApi.removeProject(projectToRemoveId);
         setConfirmDialogOpen(false);
+        setLoading(true);
+        projectApi
+            .removeProject(projectToRemoveId)
+            .then(() => {
+                return projectApi.getProjects();
+            })
+            .then((result) => {
+                setProjects(result.data);
+            })
+            .catch((error) => {
+                setError(error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const onDragEnd = (result) => {
         if (result.destination) {
-            projectApi.reorderProjects(result);
+            setLoading(true);
+            const tmpProjects = projects;
+            const [reorderedProjects] = tmpProjects.splice(
+                result.source.index,
+                1
+            );
+            tmpProjects.splice(result.destination.index, 0, reorderedProjects);
+            let calls = [];
+            for (let i = 0; i < tmpProjects.length; i++) {
+                let project = {
+                    ...tmpProjects[i],
+                    placeInProjects: i + 1,
+                };
+                calls[i] = projectApi.editProject(project);
+            }
+            Promise.all(calls)
+                .then(() => {
+                    return projectApi.getProjects();
+                })
+                .then((result) => {
+                    setProjects(result.data);
+                })
+                .catch((error) => {
+                    setError(error);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
         }
     };
 
@@ -71,7 +127,7 @@ const AdminView = () => {
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                         >
-                            {projectContext.projects.map((project, index) => {
+                            {projects.map((project, index) => {
                                 return renderProject(project, index);
                             })}
                             {provided.placeholder}
@@ -129,33 +185,38 @@ const AdminView = () => {
         <>
             <Box mt={2} mb={2}>
                 <Grid container spacing={2}>
-                    <Grid item container justify="center">
-                        <Grid container justify="space-between">
-                            <Typography variant="h5">
-                                Admin Dashboard
-                            </Typography>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={logout}
-                            >
-                                Logout
-                            </Button>
-                        </Grid>
+                    <Grid item container justify="space-between">
+                        <Typography variant="h5">Admin Dashboard</Typography>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={logout}
+                        >
+                            Logout
+                        </Button>
                     </Grid>
-                    <Grid item container justify="center">
+                    <Grid item container>
                         <Grid container justify="space-between">
                             <Typography variant="h6">Projects</Typography>
                             <Button color="primary" onClick={add}>
                                 Add project
                             </Button>
                         </Grid>
-                        {projectContext.loading ? (
-                            <CircularProgress />
+                        {loading ? (
+                            <Grid container justify="center">
+                                <Box mt={2}>
+                                    <CircularProgress />
+                                </Box>
+                            </Grid>
                         ) : (
                             renderProjectList()
                         )}
                     </Grid>
+                    {error && (
+                        <Grid item container>
+                            <AppError error={error} />
+                        </Grid>
+                    )}
                 </Grid>
             </Box>
             <ConfirmDialog

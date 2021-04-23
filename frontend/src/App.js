@@ -7,7 +7,6 @@ import {
     ThemeProvider,
 } from '@material-ui/core/styles';
 import { UserProvider } from './context/UserContext';
-import { ProjectProvider } from './context/ProjectContext';
 import useProjectApi from './hooks/useProjectApi';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -55,43 +54,31 @@ const App = () => {
     return (
         <BrowserRouter>
             <UserProvider>
-                <ProjectProvider>
-                    <ThemeProvider theme={theme}>
-                        <Initializer>
-                            <div className={classes.root}>
-                                <CssBaseline />
-                                <Header />
-                                <Container
-                                    maxWidth="md"
-                                    className={classes.content}
-                                >
-                                    <Route
-                                        exact
-                                        path="/"
-                                        component={HomeView}
-                                    />
-                                    <Route
-                                        path="/projects"
-                                        component={ProjectsView}
-                                    />
-                                    <Route
-                                        path="/admin"
-                                        component={AdminView}
-                                    />
-                                    <Route
-                                        path="/login"
-                                        component={LoginView}
-                                    />
-                                    <Route
-                                        path="/create"
-                                        component={CreateView}
-                                    />
-                                </Container>
-                                <Footer />
-                            </div>
-                        </Initializer>
-                    </ThemeProvider>
-                </ProjectProvider>
+                <ThemeProvider theme={theme}>
+                    <Initializer>
+                        <div className={classes.root}>
+                            <CssBaseline />
+                            <Header />
+                            <Container
+                                maxWidth="md"
+                                className={classes.content}
+                            >
+                                <Route exact path="/" component={HomeView} />
+                                <Route
+                                    path="/projects"
+                                    component={ProjectsView}
+                                />
+                                <Route path="/admin" component={AdminView} />
+                                <Route path="/login" component={LoginView} />
+                                <Route
+                                    path="/create/:id?"
+                                    component={CreateView}
+                                />
+                            </Container>
+                            <Footer />
+                        </div>
+                    </Initializer>
+                </ThemeProvider>
             </UserProvider>
         </BrowserRouter>
     );

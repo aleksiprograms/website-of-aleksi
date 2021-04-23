@@ -25,6 +25,43 @@ router.get('/', (request, response) => {
         });
 });
 
+router.get('/:id', (request, response) => {
+    database
+        .query('SELECT * FROM projects WHERE id = $1', [request.params.id])
+        .then((result) => {
+            const { rows } = result;
+            const row = rows[0];
+            const project = {
+                id: row.id,
+                title: row.title,
+                text: row.text,
+                platforms: row.platforms,
+                technologies: row.technologies,
+                githubUrl: row.githuburl,
+                imageUrl: row.imageurl,
+                imageOrientation: row.imageorientation,
+                placeInProjects: row.placeinprojects,
+            };
+            response.status(200).json(project);
+        })
+        .catch(() => {
+            response.sendStatus(400);
+        });
+});
+
+router.post('/count', (request, response) => {
+    database
+        .query('SELECT COUNT(*) FROM projects')
+        .then((result) => {
+            const { rows } = result;
+            const row = rows[0];
+            response.status(200).json(row);
+        })
+        .catch(() => {
+            response.sendStatus(400);
+        });
+});
+
 router.post('/', (request, response) => {
     if (!authorization.isAuthorized(request, response)) {
         return;
