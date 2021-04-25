@@ -5,22 +5,13 @@ import {
     Grid,
     Typography,
     Button,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    IconButton,
-    Tooltip,
     CircularProgress,
 } from '@material-ui/core';
-import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { UserContext } from '../context/UserContext';
+import ProjectList from '../components/project/ProjectList';
 import useProjectApi from '../hooks/useProjectApi';
-import ConfirmDialog from '../components/ConfirmDialog';
-import AppError from '../components/AppError';
+import ConfirmDialog from '../components/general/ConfirmDialog';
+import AppError from '../components/general/AppError';
 
 const AdminView = () => {
     const history = useHistory();
@@ -56,15 +47,20 @@ const AdminView = () => {
         userContext.onLogout();
     };
 
-    const add = () => {
-        history.push('/create');
+    const addProject = () => {
+        history.push('/create-project');
     };
 
-    const edit = (project) => {
-        history.push('/create/' + project.id);
+    const editProject = (projectId) => {
+        history.push('/create-project/' + projectId);
     };
 
-    const remove = () => {
+    const confirmRemoveProject = (projectId) => {
+        setProjectToRemoveId(projectId);
+        setConfirmDialogOpen(true);
+    };
+
+    const removeProject = () => {
         setConfirmDialogOpen(false);
         setLoading(true);
         projectApi
@@ -83,7 +79,7 @@ const AdminView = () => {
             });
     };
 
-    const onDragEnd = (result) => {
+    const reorderProjects = (result) => {
         if (result.destination) {
             setLoading(true);
             const tmpProjects = projects;
@@ -116,114 +112,52 @@ const AdminView = () => {
         }
     };
 
-    const renderProjectList = () => {
-        return (
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="droppableProjects">
-                    {(provided) => (
-                        <List
-                            style={{ width: '100%' }}
-                            disablePadding
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                        >
-                            {projects.map((project, index) => {
-                                return renderProject(project, index);
-                            })}
-                            {provided.placeholder}
-                        </List>
-                    )}
-                </Droppable>
-            </DragDropContext>
-        );
-    };
-
-    const renderProject = (project, index) => {
-        return (
-            <Draggable
-                key={project.id}
-                draggableId={project.id + ''}
-                index={index}
-            >
-                {(provided) => (
-                    <ListItem
-                        disableGutters
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                    >
-                        <ListItemIcon {...provided.dragHandleProps}>
-                            <DragIndicatorIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={project.title} />
-                        <ListItemIcon>
-                            <Tooltip title="Edit">
-                                <IconButton onClick={() => edit(project)}>
-                                    <EditIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </ListItemIcon>
-                        <ListItemIcon>
-                            <Tooltip title="Delete">
-                                <IconButton
-                                    edge="end"
-                                    onClick={() => {
-                                        setProjectToRemoveId(project.id);
-                                        setConfirmDialogOpen(true);
-                                    }}
-                                >
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </ListItemIcon>
-                    </ListItem>
-                )}
-            </Draggable>
-        );
-    };
-
     return (
         <>
-            <Box mt={2} mb={2}>
-                <Grid container spacing={2}>
-                    <Grid item container justify="space-between">
-                        <Typography variant="h5">Admin Dashboard</Typography>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={logout}
-                        >
-                            Logout
+            <Grid container spacing={2}>
+                <Grid item container justify="space-between">
+                    <Typography variant="h5">Admin Dashboard</Typography>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={logout}
+                    >
+                        Logout
+                    </Button>
+                </Grid>
+                <Grid item container>
+                    <Grid container justify="space-between">
+                        <Typography variant="h6">Projects</Typography>
+                        <Button color="primary" onClick={addProject}>
+                            Add project
                         </Button>
                     </Grid>
-                    <Grid item container>
-                        <Grid container justify="space-between">
-                            <Typography variant="h6">Projects</Typography>
-                            <Button color="primary" onClick={add}>
-                                Add project
-                            </Button>
+                    {loading ? (
+                        <Grid container justify="center">
+                            <Box mt={2}>
+                                <CircularProgress />
+                            </Box>
                         </Grid>
-                        {loading ? (
-                            <Grid container justify="center">
-                                <Box mt={2}>
-                                    <CircularProgress />
-                                </Box>
-                            </Grid>
-                        ) : (
-                            renderProjectList()
-                        )}
-                    </Grid>
-                    {error && (
-                        <Grid item container>
-                            <AppError error={error} />
-                        </Grid>
+                    ) : (
+                        <ProjectList
+                            projects={projects}
+                            editProject={editProject}
+                            confirmRemoveProject={confirmRemoveProject}
+                            reorderProjects={reorderProjects}
+                        />
                     )}
                 </Grid>
-            </Box>
+                {error && (
+                    <Grid item container>
+                        <AppError error={error} />
+                    </Grid>
+                )}
+            </Grid>
             <ConfirmDialog
                 open={confirmDialogOpen}
-                onCancel={() => setConfirmDialogOpen(false)}
-                onConfirm={remove}
                 text="Are you sure you want to delete this project?"
+                onConfirm={removeProject}
+                onCancel={() => setConfirmDialogOpen(false)}
             />
         </>
     );

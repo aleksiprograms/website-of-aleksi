@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import { UserContext } from '../context/UserContext';
 import useUserApi from '../hooks/useUserApi';
-import AppError from '../components/AppError';
+import AppError from '../components/general/AppError';
 
 const LoginView = () => {
     const userContext = useContext(UserContext);
@@ -43,7 +43,7 @@ const LoginView = () => {
     };
 
     return (
-        <Box mt={10} mb={2}>
+        <Box mt={10}>
             <Box mb={2}>
                 <Grid container justify="center">
                     <Typography variant="h5">Admin login</Typography>

@@ -12,22 +12,22 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     chip: {
-        marginRight: 8,
-        marginBottom: 8,
+        marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
     image: {
         float: 'left',
-        borderRadius: 8,
-        marginRight: 12,
+        borderRadius: theme.spacing(1),
+        marginRight: theme.spacing(1.5),
     },
     imageLandscape: {
         [theme.breakpoints.down('sm')]: {
             width: '100%',
-            marginBottom: 12,
+            marginBottom: theme.spacing(1.5),
         },
         [theme.breakpoints.up('sm')]: {
             width: '50%',
-            marginBottom: 0,
+            marginBottom: theme.spacing(0),
         },
     },
     imagePortrait: {
@@ -97,44 +97,41 @@ const ProjectCard = (props) => {
     };
 
     return (
-        <Grid
-            item
-            xs={12}
-            sm={project.imageOrientation === 'portrait' ? 6 : 12}
-            style={{ flexGrow: 1, height: '100%' }}
-        >
-            <Paper variant="outlined" style={{ height: '100%' }}>
-                <Box m={1.5}>
-                    <Box mt={-0.5} mb={0.5}>
-                        <Typography variant="h5">{project.title}</Typography>
-                    </Box>
-                    <div>
-                        {renderImage()}
-                        {renderTags()}
-                        <Typography>{project.text}</Typography>
-                    </div>
-                    <Grid item container justify="flex-end">
-                        <Box mt={1}>
-                            <Link
-                                href={project.githubUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                underline="none"
-                            >
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="small"
-                                >
-                                    GitHub
-                                </Button>
-                            </Link>
-                        </Box>
-                    </Grid>
+        <Paper variant="outlined">
+            <Box m={1.5}>
+                <Box mt={-0.5} mb={0.5}>
+                    <Typography variant="h5">{project.title}</Typography>
                 </Box>
-            </Paper>
-        </Grid>
+                <div>
+                    {renderImage()}
+                    {renderTags()}
+                    <Typography>{project.text}</Typography>
+                </div>
+                <Grid item container justify="flex-end">
+                    <Box mt={1}>
+                        <Link
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            underline="none"
+                        >
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                            >
+                                GitHub
+                            </Button>
+                        </Link>
+                    </Box>
+                </Grid>
+            </Box>
+        </Paper>
     );
+};
+
+ProjectCard.defaultProps = {
+    project: null,
 };
 
 export default ProjectCard;

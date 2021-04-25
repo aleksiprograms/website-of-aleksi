@@ -27,8 +27,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Header = () => {
-    const isOnMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
-
     const classes = useStyles();
     const history = useHistory();
     const location = useLocation();
@@ -38,6 +36,8 @@ const Header = () => {
         { title: 'Projects', path: '/projects', active: false },
     ]);
     const [openMenuOnMobile, setOpenMenuOnMobile] = useState(false);
+
+    const isOnMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
     useEffect(() => {
         if (!isOnMobile) {

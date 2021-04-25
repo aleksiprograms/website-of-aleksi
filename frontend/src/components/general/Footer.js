@@ -2,14 +2,14 @@ import React from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: '#111',
         color: '#fff',
     },
     text: {
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
     },
 }));
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { CssBaseline, Container } from '@material-ui/core';
 import {
@@ -7,16 +7,15 @@ import {
     ThemeProvider,
 } from '@material-ui/core/styles';
 import { UserProvider } from './context/UserContext';
-import useProjectApi from './hooks/useProjectApi';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './components/general/Header';
+import Footer from './components/general/Footer';
 import HomeView from './views/HomeView';
 import ProjectsView from './views/ProjectsView';
-import AdminView from './views/AdminView';
 import LoginView from './views/LoginView';
-import CreateView from './views/CreateView';
+import AdminView from './views/AdminView';
+import CreateProjectView from './views/CreateProjectView';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
@@ -24,6 +23,8 @@ const useStyles = makeStyles(() => ({
     },
     content: {
         flex: 1,
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
     },
 }));
 
@@ -38,16 +39,6 @@ const theme = createMuiTheme({
     },
 });
 
-const Initializer = ({ children }) => {
-    const projectApi = useProjectApi();
-
-    useEffect(() => {
-        projectApi.getProjects();
-    }, []);
-
-    return <>{children}</>;
-};
-
 const App = () => {
     const classes = useStyles();
 
@@ -55,29 +46,21 @@ const App = () => {
         <BrowserRouter>
             <UserProvider>
                 <ThemeProvider theme={theme}>
-                    <Initializer>
-                        <div className={classes.root}>
-                            <CssBaseline />
-                            <Header />
-                            <Container
-                                maxWidth="md"
-                                className={classes.content}
-                            >
-                                <Route exact path="/" component={HomeView} />
-                                <Route
-                                    path="/projects"
-                                    component={ProjectsView}
-                                />
-                                <Route path="/admin" component={AdminView} />
-                                <Route path="/login" component={LoginView} />
-                                <Route
-                                    path="/create/:id?"
-                                    component={CreateView}
-                                />
-                            </Container>
-                            <Footer />
-                        </div>
-                    </Initializer>
+                    <div className={classes.root}>
+                        <CssBaseline />
+                        <Header />
+                        <Container maxWidth="md" className={classes.content}>
+                            <Route exact path="/" component={HomeView} />
+                            <Route path="/projects" component={ProjectsView} />
+                            <Route path="/login" component={LoginView} />
+                            <Route path="/admin" component={AdminView} />
+                            <Route
+                                path="/create-project/:id?"
+                                component={CreateProjectView}
+                            />
+                        </Container>
+                        <Footer />
+                    </div>
                 </ThemeProvider>
             </UserProvider>
         </BrowserRouter>
