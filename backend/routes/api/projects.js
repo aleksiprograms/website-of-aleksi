@@ -4,21 +4,10 @@ const authorization = require('../../utils/authorization');
 
 router.get('/', (request, response) => {
     database
-        .query('SELECT * FROM projects ORDER BY placeinprojects ASC')
+        .query('SELECT * FROM projects ORDER BY place ASC')
         .then((result) => {
             const { rows } = result;
-            const projects = rows.map((row) => ({
-                id: row.id,
-                title: row.title,
-                text: row.text,
-                platforms: row.platforms,
-                technologies: row.technologies,
-                githubUrl: row.githuburl,
-                imageUrl: row.imageurl,
-                imageOrientation: row.imageorientation,
-                placeInProjects: row.placeinprojects,
-            }));
-            response.status(200).json(projects);
+            response.status(200).json(rows);
         })
         .catch(() => {
             response.sendStatus(400);
@@ -30,19 +19,7 @@ router.get('/:id', (request, response) => {
         .query('SELECT * FROM projects WHERE id = $1', [request.params.id])
         .then((result) => {
             const { rows } = result;
-            const row = rows[0];
-            const project = {
-                id: row.id,
-                title: row.title,
-                text: row.text,
-                platforms: row.platforms,
-                technologies: row.technologies,
-                githubUrl: row.githuburl,
-                imageUrl: row.imageurl,
-                imageOrientation: row.imageorientation,
-                placeInProjects: row.placeinprojects,
-            };
-            response.status(200).json(project);
+            response.status(200).json(rows[0]);
         })
         .catch(() => {
             response.sendStatus(400);
@@ -69,29 +46,14 @@ router.post('/', (request, response) => {
     const { body } = request;
     database
         .query(
-            'INSERT INTO projects ' +
-                '(' +
+            'INSERT INTO projects (' +
                 'title, ' +
                 'text, ' +
-                'platforms, ' +
-                'technologies, ' +
-                'githuburl, ' +
-                'imageurl, ' +
-                'imageorientation, ' +
-                'placeinprojects' +
+                'place' +
                 ') ' +
-                'VALUES($1, $2, $3, $4, $5, $6, $7, $8)' +
+                'VALUES($1, $2, $3)' +
                 'RETURNING id',
-            [
-                body.title,
-                body.text,
-                body.platforms,
-                body.technologies,
-                body.githubUrl,
-                body.imageUrl,
-                body.imageOrientation,
-                body.placeInProjects,
-            ]
+            [body.title, body.text, body.place]
         )
         .then((result) => {
             response.status(200).json({ id: result.rows[0].id });
@@ -112,24 +74,9 @@ router.put('/:id', (request, response) => {
                 'SET ' +
                 'title = $1, ' +
                 'text = $2, ' +
-                'platforms = $3, ' +
-                'technologies = $4, ' +
-                'githuburl = $5, ' +
-                'imageurl = $6, ' +
-                'imageorientation = $7, ' +
-                'placeinprojects = $8 ' +
-                'WHERE id = $9',
-            [
-                body.title,
-                body.text,
-                body.platforms,
-                body.technologies,
-                body.githubUrl,
-                body.imageUrl,
-                body.imageOrientation,
-                body.placeInProjects,
-                request.params.id,
-            ]
+                'place = $3 ' +
+                'WHERE id = $4',
+            [body.title, body.text, body.place, request.params.id]
         )
         .then(() => {
             response.sendStatus(200);
