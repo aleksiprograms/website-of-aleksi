@@ -14,6 +14,7 @@ import ProjectsView from './views/ProjectsView';
 import LoginView from './views/LoginView';
 import AdminView from './views/AdminView';
 import CreateProjectView from './views/CreateProjectView';
+import TagsView from './views/TagsView';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,6 +59,7 @@ const App = () => {
                                 path="/create-project/:id?"
                                 component={CreateProjectView}
                             />
+                            <Route path="/tags" component={TagsView} />
                         </Container>
                         <Footer />
                     </div>

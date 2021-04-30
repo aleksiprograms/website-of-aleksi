@@ -47,6 +47,10 @@ const AdminView = () => {
         userContext.onLogout();
     };
 
+    const tags = () => {
+        history.push('/tags');
+    };
+
     const addProject = () => {
         history.push('/create-project');
     };
@@ -128,9 +132,28 @@ const AdminView = () => {
                 <Grid item container>
                     <Grid container justify="space-between">
                         <Typography variant="h6">Projects</Typography>
-                        <Button color="primary" onClick={addProject}>
-                            Add project
-                        </Button>
+                        <Grid item>
+                            <Grid container spacing={2}>
+                                <Grid item>
+                                    <Button
+                                        color="primary"
+                                        variant="outlined"
+                                        onClick={tags}
+                                    >
+                                        Tags
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button
+                                        color="primary"
+                                        variant="outlined"
+                                        onClick={addProject}
+                                    >
+                                        Add project
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     {loading ? (
                         <Grid container justify="center">

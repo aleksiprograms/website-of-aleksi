@@ -66,6 +66,16 @@ client
     })
     .then(() => {
         console.log('Table projects OK');
+        return client.query(
+            'CREATE TABLE IF NOT EXISTS tags (' +
+                'id SERIAL PRIMARY KEY, ' +
+                'name VARCHAR(255) NOT NULL, ' +
+                'importance VARCHAR(255) NOT NULL' +
+                ');'
+        );
+    })
+    .then(() => {
+        console.log('Table tags OK');
     })
     .catch((error) => {
         console.log('Database error', error);
