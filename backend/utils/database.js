@@ -1,29 +1,5 @@
 const { Client } = require('pg');
 
-// users table creation
-/*
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
-);
-*/
-
-// old projects table creation
-/*
-CREATE TABLE projects (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    text VARCHAR(3000) NOT NULL,
-    platforms VARCHAR(255) NOT NULL,
-    technologies VARCHAR(255) NOT NULL,
-    githuburl VARCHAR(255) NOT NULL,
-    imageurl VARCHAR(255),
-    imageorientation VARCHAR(255),
-    placeinprojects INTEGER NOT NULL
-);
-*/
-
 /*
 const client = new Client({
     connectionString: process.env.DATABASE_URL,
@@ -46,36 +22,62 @@ client
     .then(() => {
         console.log('Database connected');
         return client.query(
-            'CREATE TABLE IF NOT EXISTS users (' +
-                'id SERIAL PRIMARY KEY, ' +
-                'username VARCHAR(255) NOT NULL, ' +
-                'password VARCHAR(255) NOT NULL' +
-                ');'
+            `
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                username VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL
+            );
+            `
         );
     })
     .then(() => {
         console.log('Table users OK');
         return client.query(
-            'CREATE TABLE IF NOT EXISTS projects (' +
-                'id SERIAL PRIMARY KEY, ' +
-                'title VARCHAR(255) NOT NULL, ' +
-                'text VARCHAR(3000) NOT NULL, ' +
-                'place INTEGER NOT NULL' +
-                ');'
+            `
+            CREATE TABLE IF NOT EXISTS projects (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                text VARCHAR(3000) NOT NULL,
+                place INTEGER NOT NULL
+            );
+            `
         );
     })
     .then(() => {
         console.log('Table projects OK');
         return client.query(
-            'CREATE TABLE IF NOT EXISTS tags (' +
-                'id SERIAL PRIMARY KEY, ' +
-                'name VARCHAR(255) NOT NULL, ' +
-                'importance VARCHAR(255) NOT NULL' +
-                ');'
+            `
+            CREATE TABLE IF NOT EXISTS tags (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                importance VARCHAR(255) NOT NULL
+            );
+            `
         );
     })
     .then(() => {
         console.log('Table tags OK');
+        return client.query(
+            `
+            CREATE TABLE IF NOT EXISTS project_tags (
+                id SERIAL PRIMARY KEY,
+                project_id INT NOT NULL,
+                tag_id INT NOT NULL,
+                CONSTRAINT fk_project
+                    FOREIGN KEY(project_id)
+                        REFERENCES projects(id)
+                        ON DELETE CASCADE,
+                CONSTRAINT fk_tag
+                    FOREIGN KEY(tag_id)
+                        REFERENCES tags(id)
+                        ON DELETE CASCADE
+            );
+            `
+        );
+    })
+    .then(() => {
+        console.log('Table project_tags OK');
     })
     .catch((error) => {
         console.log('Database error', error);

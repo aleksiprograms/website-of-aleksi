@@ -2,33 +2,55 @@ import React, { useState, useEffect } from 'react';
 import {
     Grid,
     TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
     Button,
+    Chip,
     CircularProgress,
 } from '@material-ui/core';
 import AppError from '../general/AppError';
 
 const ProjectForm = (props) => {
-    const { submit, cancel, initValues, loading, error } = props;
+    const { allTags, submit, cancel, initValues, loading, error } = props;
 
     const [project, setProject] = useState({
         title: '',
         text: '',
-        platforms: '',
-        technologies: '',
-        githubUrl: '',
-        imageUrl: '',
-        imageOrientation: 'none',
     });
+    const [tags, setTags] = useState(allTags);
+
+    useEffect(() => {
+        setTags(
+            allTags.map((tag) => {
+                let selected = initValues?.tags.find((t) => t.id === tag.id);
+                return {
+                    ...tag,
+                    selected: selected != null,
+                    inDB: selected != null,
+                    project_tag_id: selected ? selected.project_tag_id : null,
+                };
+            })
+        );
+    }, [allTags, initValues]);
 
     useEffect(() => {
         if (initValues != null) {
             setProject(initValues);
         }
     }, [initValues]);
+
+    const toggleTag = (id) => {
+        setTags((prevTags) => {
+            return prevTags.map((tag) => {
+                if (tag.id === id) {
+                    return {
+                        ...tag,
+                        selected: !tag.selected,
+                    };
+                } else {
+                    return tag;
+                }
+            });
+        });
+    };
 
     return (
         <Grid container spacing={2}>
@@ -66,118 +88,27 @@ const ProjectForm = (props) => {
                     fullWidth
                     variant="outlined"
                     multiline
+                    rows={5}
+                    rowsMax={15}
                 />
             </Grid>
-            <Grid item container>
-                <TextField
-                    label="Platforms"
-                    value={project.platforms}
-                    onChange={(event) => {
-                        event.persist();
-                        setProject((prevState) => {
-                            return {
-                                ...prevState,
-                                platforms: event.target.value,
-                            };
-                        });
-                    }}
-                    fullWidth
-                    variant="outlined"
-                />
+            <Grid item container justify="center" spacing={1}>
+                {tags.map((tag) => {
+                    return (
+                        <Grid item>
+                            <Chip
+                                label={tag.name}
+                                color={tag.importance}
+                                variant={tag.selected ? 'default' : 'outlined'}
+                                size="small"
+                                onClick={() => {
+                                    toggleTag(tag.id);
+                                }}
+                            />
+                        </Grid>
+                    );
+                })}
             </Grid>
-            <Grid item container>
-                <TextField
-                    label="Technologies"
-                    value={project.technologies}
-                    onChange={(event) => {
-                        event.persist();
-                        setProject((prevState) => {
-                            return {
-                                ...prevState,
-                                technologies: event.target.value,
-                            };
-                        });
-                    }}
-                    fullWidth
-                    variant="outlined"
-                />
-            </Grid>
-            <Grid item container>
-                <TextField
-                    label="GitHub Url"
-                    value={project.githubUrl}
-                    onChange={(event) => {
-                        event.persist();
-                        setProject((prevState) => {
-                            return {
-                                ...prevState,
-                                githubUrl: event.target.value,
-                            };
-                        });
-                    }}
-                    fullWidth
-                    variant="outlined"
-                />
-            </Grid>
-            <Grid item container>
-                <TextField
-                    label="Image Url"
-                    value={project.imageUrl}
-                    onChange={(event) => {
-                        event.persist();
-                        setProject((prevState) => {
-                            return {
-                                ...prevState,
-                                imageUrl: event.target.value,
-                            };
-                        });
-                        if (event.target.value === '') {
-                            setProject((prevState) => {
-                                return {
-                                    ...prevState,
-                                    imageOrientation: 'none',
-                                };
-                            });
-                        }
-                        if (
-                            event.target.value !== '' &&
-                            project.imageOrientation === 'none'
-                        ) {
-                            setProject((prevState) => {
-                                return {
-                                    ...prevState,
-                                    imageOrientation: 'landscape',
-                                };
-                            });
-                        }
-                    }}
-                    fullWidth
-                    variant="outlined"
-                />
-            </Grid>
-            {project?.imageUrl?.length > 0 && (
-                <Grid item container>
-                    <FormControl variant="outlined" fullWidth>
-                        <InputLabel>Image Orientation</InputLabel>
-                        <Select
-                            value={project.imageOrientation}
-                            label="Image Orientation"
-                            onChange={(event) => {
-                                event.persist();
-                                setProject((prevState) => {
-                                    return {
-                                        ...prevState,
-                                        imageOrientation: event.target.value,
-                                    };
-                                });
-                            }}
-                        >
-                            <MenuItem value="landscape">Landscape</MenuItem>
-                            <MenuItem value="portrait">Portrait</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-            )}
             {error && (
                 <Grid item container>
                     <AppError error={error} />
@@ -202,7 +133,7 @@ const ProjectForm = (props) => {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => submit(project)}
+                            onClick={() => submit(project, tags)}
                         >
                             Save
                         </Button>

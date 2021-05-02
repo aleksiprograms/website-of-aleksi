@@ -4,7 +4,11 @@ const authorization = require('../../utils/authorization');
 
 router.get('/', (request, response) => {
     database
-        .query('SELECT * FROM tags ORDER BY importance ASC, id ASC')
+        .query(
+            `
+            SELECT * FROM tags ORDER BY importance ASC, id ASC;
+            `
+        )
         .then((result) => {
             const { rows } = result;
             response.status(200).json(rows);
@@ -16,7 +20,12 @@ router.get('/', (request, response) => {
 
 router.get('/:id', (request, response) => {
     database
-        .query('SELECT * FROM tags WHERE id = $1', [request.params.id])
+        .query(
+            `
+            SELECT * FROM tags WHERE id = $1;
+            `,
+            [request.params.id]
+        )
         .then((result) => {
             const { rows } = result;
             response.status(200).json(rows[0]);
@@ -33,12 +42,11 @@ router.post('/', (request, response) => {
     const { body } = request;
     database
         .query(
-            'INSERT INTO tags (' +
-                'name, ' +
-                'importance' +
-                ') ' +
-                'VALUES($1, $2)' +
-                'RETURNING id',
+            `
+            INSERT INTO tags (name, importance)
+            VALUES($1, $2)
+            RETURNING id;
+            `,
             [body.name, body.importance]
         )
         .then((result) => {
@@ -56,11 +64,11 @@ router.put('/:id', (request, response) => {
     const { body } = request;
     database
         .query(
-            'UPDATE tags ' +
-                'SET ' +
-                'name = $1, ' +
-                'importance = $2 ' +
-                'WHERE id = $3',
+            `
+            UPDATE tags
+            SET name = $1, importance = $2
+            WHERE id = $3;
+            `,
             [body.name, body.importance, request.params.id]
         )
         .then(() => {

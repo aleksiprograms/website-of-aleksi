@@ -6,7 +6,11 @@ const database = require('../../utils/database');
 router.post('/login', async (request, response) => {
     const { body } = request;
     let user = null;
-    const { rows } = await database.query('SELECT * FROM Users');
+    const { rows } = await database.query(
+        `
+        SELECT * FROM users;
+        `
+    );
     user = rows.find((row) => row.username === body.username);
 
     const passwordCorrect =

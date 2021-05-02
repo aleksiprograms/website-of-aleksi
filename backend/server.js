@@ -6,6 +6,7 @@ require('dotenv').config();
 const users = require('./routes/api/users');
 const projects = require('./routes/api/projects');
 const tags = require('./routes/api/tags');
+const projectTags = require('./routes/api/project-tags');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,6 +29,7 @@ if (process.env.NODE_ENV === 'production') {
 app.use('/api/users', users);
 app.use('/api/projects', projects);
 app.use('/api/tags', tags);
+app.use('/api/project-tags', projectTags);
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));

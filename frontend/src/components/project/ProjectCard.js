@@ -66,26 +66,13 @@ const ProjectCard = (props) => {
     };
 
     const renderTags = () => {
-        const platforms = project.platforms.split(', ');
-        const technologies = project.technologies.split(', ');
         return (
             <>
-                {platforms.map((platform) => {
+                {project.tags.map((tag) => {
                     return (
                         <Chip
-                            label={platform}
-                            color="primary"
-                            variant="outlined"
-                            size="small"
-                            className={classes.chip}
-                        />
-                    );
-                })}
-                {technologies.map((technology) => {
-                    return (
-                        <Chip
-                            label={technology}
-                            color="secondary"
+                            label={tag?.name}
+                            color={tag?.importance}
                             variant="outlined"
                             size="small"
                             className={classes.chip}
@@ -103,7 +90,7 @@ const ProjectCard = (props) => {
                     <Typography variant="h5">{project.title}</Typography>
                 </Box>
                 <div>
-                    {renderImage()}
+                    {/*renderImage()*/}
                     {renderTags()}
                     <Typography>{project.text}</Typography>
                 </div>
