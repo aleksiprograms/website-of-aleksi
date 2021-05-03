@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import {
     Container,
@@ -15,8 +15,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import MenuIcon from '@material-ui/icons/Menu';
+import { UserContext } from '../../context/UserContext';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: '#111',
         color: '#fff',
@@ -24,20 +25,24 @@ const useStyles = makeStyles(() => ({
     title: {
         flexGrow: 1,
     },
+    buttonWithMargin: {
+        marginLeft: theme.spacing(2),
+    },
 }));
 
 const Header = () => {
     const classes = useStyles();
     const history = useHistory();
     const location = useLocation();
-
+    const userContext = useContext(UserContext);
     const [navigations, setNavigations] = useState([
         { title: 'Home', path: '/', active: false },
         { title: 'Projects', path: '/projects', active: false },
+        { title: 'Admin', path: '/admin', active: false },
     ]);
     const [openMenuOnMobile, setOpenMenuOnMobile] = useState(false);
 
-    const isOnMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+    const isOnMobile = useMediaQuery((theme) => theme.breakpoints.down('xs'));
 
     useEffect(() => {
         if (!isOnMobile) {
@@ -63,22 +68,32 @@ const Header = () => {
         });
     }, [location.pathname]);
 
-    const renderNavigation = () => {
+    const renderNavigationButton = (navigation, addMargin) => {
+        return (
+            <>
+                {navigation.title === 'Admin' &&
+                userContext.user == null ? null : (
+                    <Button
+                        key={navigation.path}
+                        color={navigation.active ? 'primary' : 'inherit'}
+                        className={addMargin ? classes.buttonWithMargin : {}}
+                        onClick={() => {
+                            setOpenMenuOnMobile(false);
+                            history.push(navigation.path);
+                        }}
+                    >
+                        {navigation.title}
+                    </Button>
+                )}
+            </>
+        );
+    };
+
+    const renderNavigation = (addMargin) => {
         return (
             <>
                 {navigations.map((navigation) => {
-                    return (
-                        <Button
-                            key={navigation.path}
-                            color={navigation.active ? 'primary' : 'inherit'}
-                            onClick={() => {
-                                setOpenMenuOnMobile(false);
-                                history.push(navigation.path);
-                            }}
-                        >
-                            {navigation.title}
-                        </Button>
-                    );
+                    return <>{renderNavigationButton(navigation, addMargin)}</>;
                 })}
             </>
         );
@@ -104,7 +119,7 @@ const Header = () => {
                             <MenuIcon />
                         </IconButton>
                     ) : (
-                        <>{renderNavigation()}</>
+                        <>{renderNavigation(true)}</>
                     )}
                 </Toolbar>
                 <Collapse in={openMenuOnMobile} timeout="auto" unmountOnExit>
@@ -115,7 +130,7 @@ const Header = () => {
                             justify="center"
                             alignContent="center"
                         >
-                            {renderNavigation()}
+                            {renderNavigation(false)}
                         </Grid>
                     </Box>
                 </Collapse>
