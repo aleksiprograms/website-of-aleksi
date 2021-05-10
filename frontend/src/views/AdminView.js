@@ -5,13 +5,14 @@ import {
     Grid,
     Typography,
     Button,
+    ListItemText,
     CircularProgress,
 } from '@material-ui/core';
 import { UserContext } from '../context/UserContext';
-import ProjectList from '../components/project/ProjectList';
 import useProjectApi from '../hooks/useProjectApi';
 import ConfirmDialog from '../components/general/ConfirmDialog';
 import AppError from '../components/general/AppError';
+import DragDropList from '../components/general/DragDropList';
 
 const AdminView = () => {
     const history = useHistory();
@@ -96,7 +97,7 @@ const AdminView = () => {
             for (let i = 0; i < tmpProjects.length; i++) {
                 let project = {
                     ...tmpProjects[i],
-                    placeInProjects: i + 1,
+                    place: i + 1,
                 };
                 calls[i] = projectApi.editProject(project);
             }
@@ -114,6 +115,15 @@ const AdminView = () => {
                     setLoading(false);
                 });
         }
+    };
+
+    const projectsForList = () => {
+        return projects.map((project) => {
+            return {
+                ...project,
+                content: <ListItemText primary={project.title} />,
+            };
+        });
     };
 
     return (
@@ -162,11 +172,12 @@ const AdminView = () => {
                             </Box>
                         </Grid>
                     ) : (
-                        <ProjectList
-                            projects={projects}
-                            editProject={editProject}
-                            confirmRemoveProject={confirmRemoveProject}
-                            reorderProjects={reorderProjects}
+                        <DragDropList
+                            droppableId="droppableProjects"
+                            items={projectsForList()}
+                            onReorder={reorderProjects}
+                            onEdit={editProject}
+                            onRemove={confirmRemoveProject}
                         />
                     )}
                 </Grid>
