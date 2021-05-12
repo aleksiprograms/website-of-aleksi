@@ -6,6 +6,7 @@ require('dotenv').config();
 const users = require('./routes/api/users');
 const projects = require('./routes/api/projects');
 const tags = require('./routes/api/tags');
+const projectImages = require('./routes/api/project-images');
 const projectTags = require('./routes/api/project-tags');
 
 const app = express();
@@ -29,7 +30,9 @@ if (process.env.NODE_ENV === 'production') {
 app.use('/api/users', users);
 app.use('/api/projects', projects);
 app.use('/api/tags', tags);
+app.use('/api/project-images', projectImages);
 app.use('/api/project-tags', projectTags);
+app.use(express.static('public'));
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));

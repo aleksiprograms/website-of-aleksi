@@ -60,6 +60,22 @@ client
         console.log('Table tags OK');
         return client.query(
             `
+            CREATE TABLE IF NOT EXISTS project_images (
+                id SERIAL PRIMARY KEY,
+                image_name VARCHAR(255) NOT NULL,
+                project_id INT NOT NULL,
+                CONSTRAINT fk_project
+                    FOREIGN KEY(project_id)
+                        REFERENCES projects(id)
+                        ON DELETE CASCADE
+            );
+            `
+        );
+    })
+    .then(() => {
+        console.log('Table project_images OK');
+        return client.query(
+            `
             CREATE TABLE IF NOT EXISTS project_tags (
                 id SERIAL PRIMARY KEY,
                 project_id INT NOT NULL,

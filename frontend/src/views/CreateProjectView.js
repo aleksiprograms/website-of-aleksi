@@ -4,6 +4,7 @@ import { Grid, Typography, CircularProgress } from '@material-ui/core';
 import { UserContext } from '../context/UserContext';
 import useTagApi from '../hooks/useTagApi';
 import useProjectApi from '../hooks/useProjectApi';
+import useProjectImageApi from '../hooks/useProjectImageApi';
 import useProjectTagApi from '../hooks/useProjectTagApi';
 import ProjectForm from '../components/project/ProjectForm';
 
@@ -14,6 +15,7 @@ const CreateProjectView = (props) => {
     const userContext = useContext(UserContext);
     const tagApi = useTagApi();
     const projectApi = useProjectApi();
+    const projectImageApi = useProjectImageApi();
     const projectTagApi = useProjectTagApi();
     const [allTags, setAllTags] = useState([]);
     const [initLoading, setInitLoading] = useState(false);
@@ -57,6 +59,17 @@ const CreateProjectView = (props) => {
         return <Redirect to="/login" />;
     }
 
+    const submitImages = (projectId, images) => {
+        let promises = [];
+        images.forEach((image) => {
+            const formData = new FormData();
+            formData.append('file', image.file);
+            formData.set('project_id', projectId);
+            promises.push(projectImageApi.addProjectImage(formData));
+        });
+        return Promise.all(promises);
+    };
+
     const submitTags = (projectId, tags) => {
         let calls = [];
         tags.forEach((tag) => {
@@ -78,12 +91,14 @@ const CreateProjectView = (props) => {
         return Promise.all(calls);
     };
 
-    const submit = (project, tags) => {
-        console.log('project', project);
+    const submit = (project, images, tags) => {
         setLoading(true);
         if (match.params.id != null) {
             projectApi
                 .editProject(project)
+                .then(() => {
+                    return submitImages(project.id, images);
+                })
                 .then(() => {
                     return submitTags(project.id, tags);
                 })
@@ -91,13 +106,13 @@ const CreateProjectView = (props) => {
                     history.push('/admin');
                 })
                 .catch((error) => {
-                    console.log('error', error);
                     setError(error);
                 })
                 .finally(() => {
                     setLoading(false);
                 });
         } else {
+            let projectId = 0;
             projectApi
                 .countProjects()
                 .then((result) => {
@@ -105,8 +120,11 @@ const CreateProjectView = (props) => {
                     return projectApi.addProject(project);
                 })
                 .then((result) => {
-                    console.log('result new', result);
-                    return submitTags(result.data.id, tags);
+                    projectId = result.data.id;
+                    return submitImages(projectId, images);
+                })
+                .then(() => {
+                    return submitTags(projectId, tags);
                 })
                 .then(() => {
                     history.push('/admin');

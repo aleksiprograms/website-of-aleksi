@@ -165,7 +165,7 @@ const ProjectForm = (props) => {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                onClick={() => submit(project, tags)}
+                                onClick={() => submit(project, images, tags)}
                             >
                                 Save
                             </Button>
