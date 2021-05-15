@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Box,
     Grid,
@@ -9,6 +9,7 @@ import {
     Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import ViewImagesDialog from '../image/ViewImagesDialog';
 
 const useStyles = makeStyles((theme) => ({
     chip: {
@@ -39,9 +40,17 @@ const ProjectCard = (props) => {
     const { project } = props;
 
     const classes = useStyles();
+    const [viewImagesDialogOpen, setViewImagesDialogOpen] = useState(false);
 
-    const renderImage = () => {
-        switch (project.imageOrientation) {
+    const renderMainImage = () => {
+        return (
+            <img
+                src={`/images/${project.images[0].image_name}`}
+                alt="Screenshot from project"
+                className={`${classes.image} ${classes.imageLandscape}`}
+            />
+        );
+        /* switch (project.imageOrientation) {
             case 'landscape':
                 return (
                     <img
@@ -62,7 +71,7 @@ const ProjectCard = (props) => {
                 return null;
             default:
                 return null;
-        }
+        } */
     };
 
     const renderTags = () => {
@@ -84,36 +93,53 @@ const ProjectCard = (props) => {
     };
 
     return (
-        <Paper variant="outlined">
-            <Box m={1.5}>
-                <Box mt={-0.5} mb={0.5}>
-                    <Typography variant="h5">{project.title}</Typography>
-                </Box>
-                <div>
-                    {/*renderImage()*/}
-                    {renderTags()}
-                    <Typography>{project.text}</Typography>
-                </div>
-                <Grid item container justify="flex-end">
-                    <Box mt={1}>
-                        <Link
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            underline="none"
-                        >
+        <>
+            <Paper variant="outlined">
+                <Box m={1.5}>
+                    <Box mt={-0.5} mb={0.5}>
+                        <Typography variant="h5">{project.title}</Typography>
+                    </Box>
+                    <div>
+                        {renderMainImage()}
+                        {renderTags()}
+                        <Typography>{project.text}</Typography>
+                    </div>
+                    <Grid item container justify="flex-end">
+                        <Box mt={1} mr={1}>
                             <Button
                                 variant="contained"
                                 color="primary"
                                 size="small"
+                                onClick={() => setViewImagesDialogOpen(true)}
                             >
-                                GitHub
+                                Images
                             </Button>
-                        </Link>
-                    </Box>
-                </Grid>
-            </Box>
-        </Paper>
+                        </Box>
+                        <Box mt={1}>
+                            <Link
+                                href={project.githubUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                underline="none"
+                            >
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                >
+                                    GitHub
+                                </Button>
+                            </Link>
+                        </Box>
+                    </Grid>
+                </Box>
+            </Paper>
+            <ViewImagesDialog
+                open={viewImagesDialogOpen}
+                setOpen={setViewImagesDialogOpen}
+                images={project.images}
+            />
+        </>
     );
 };
 
