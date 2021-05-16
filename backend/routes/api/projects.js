@@ -11,7 +11,7 @@ router.get('/', (request, response) => {
             LEFT JOIN (
                 SELECT pi.project_id AS id, json_agg(json_build_object(
                     'image_name', pi.image_name
-                )) AS images
+                ) ORDER BY place ASC) AS images
                 FROM project_images AS pi
                 GROUP BY pi.project_id
             ) AS i ON i.id = p.id
@@ -40,8 +40,16 @@ router.get('/:id', (request, response) => {
     database
         .query(
             `
-            SELECT p.id, p.title, p.text, p.place, COALESCE(t.tags, '[]') AS tags
+            SELECT p.id, p.title, p.text, p.place, COALESCE(i.images, '[]') AS images, COALESCE(t.tags, '[]') AS tags
             FROM projects AS p
+            LEFT JOIN (
+                SELECT pi.project_id AS id, json_agg(json_build_object(
+                    'id', pi.id,
+                    'image_name', pi.image_name
+                ) ORDER BY place ASC) AS images
+                FROM project_images AS pi
+                GROUP BY pi.project_id
+            ) AS i ON i.id = p.id
             LEFT JOIN (
                 SELECT pt.project_id AS id, json_agg(json_build_object(
                     'id', t.id,

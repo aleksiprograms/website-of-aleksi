@@ -26,10 +26,10 @@ router.post('/', (request, response) => {
         database
             .query(
                 `
-                INSERT INTO project_images (image_name, project_id)
-                VALUES($1, $2);
+                INSERT INTO project_images (image_name, place, project_id)
+                VALUES($1, $2, $3);
                 `,
-                [request.file.filename, body.project_id]
+                [request.file.filename, body.place, body.project_id]
             )
             .then(() => {
                 response.sendStatus(200);
@@ -38,6 +38,48 @@ router.post('/', (request, response) => {
                 response.sendStatus(400);
             });
     });
+});
+
+router.put('/:id', (request, response) => {
+    if (!authorization.isAuthorized(request, response)) {
+        return;
+    }
+    const { body } = request;
+    database
+        .query(
+            `
+            UPDATE project_images
+            SET place = $1
+            WHERE id = $2;
+            `,
+            [body.place, request.params.id]
+        )
+        .then(() => {
+            response.sendStatus(200);
+        })
+        .catch(() => {
+            response.sendStatus(400);
+        });
+});
+
+router.delete('/:id', (request, response) => {
+    if (!authorization.isAuthorized(request, response)) {
+        return;
+    }
+    database
+        .query(
+            `
+            DELETE FROM project_images
+            WHERE id = $1;
+            `,
+            [request.params.id]
+        )
+        .then(() => {
+            response.sendStatus(200);
+        })
+        .catch(() => {
+            response.sendStatus(400);
+        });
 });
 
 module.exports = router;

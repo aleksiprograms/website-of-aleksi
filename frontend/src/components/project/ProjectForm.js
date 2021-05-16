@@ -22,6 +22,14 @@ const ProjectForm = (props) => {
     const [editImagesDialogOpen, setEditImagesDialogOpen] = useState(false);
 
     useEffect(() => {
+        setImages(
+            initValues?.images.map((image) => {
+                return {
+                    ...image,
+                    inDB: true,
+                };
+            })
+        );
         setTags(
             allTags.map((tag) => {
                 let selected = initValues?.tags.find((t) => t.id === tag.id);
@@ -54,6 +62,24 @@ const ProjectForm = (props) => {
                 }
             });
         });
+    };
+
+    const renderImage = (image) => {
+        if (image.remove) {
+            return null;
+        } else if (image.inDB) {
+            return getImage(image.id, `/images/${image.image_name}`);
+        } else {
+            return getImage(image.id, URL.createObjectURL(image.file));
+        }
+    };
+
+    const getImage = (id, src) => {
+        return (
+            <Grid item key={id}>
+                <img src={src} alt="File" style={{ height: 70 }} />
+            </Grid>
+        );
     };
 
     return (
@@ -98,20 +124,15 @@ const ProjectForm = (props) => {
                     />
                 </Grid>
                 <Grid item container>
-                    {images.length === 0 && (
+                    {images == null || images?.length === 0 ? (
                         <Typography>No images chosen</Typography>
+                    ) : (
+                        <Grid container spacing={2}>
+                            {images.map((image) => (
+                                <>{renderImage(image)}</>
+                            ))}
+                        </Grid>
                     )}
-                    <Grid container spacing={2}>
-                        {images.map((image) => (
-                            <Grid item key={image.id}>
-                                <img
-                                    src={URL.createObjectURL(image.file)}
-                                    alt="File"
-                                    style={{ height: 70 }}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
                 </Grid>
                 <Grid item container justify="flex-end">
                     <Button

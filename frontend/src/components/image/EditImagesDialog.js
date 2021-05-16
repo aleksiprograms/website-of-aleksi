@@ -12,10 +12,11 @@ const EditImagesDialog = (props) => {
     const { open, setOpen, initImages, setFinalImages } = props;
 
     const [images, setImages] = useState([]);
+    const [, setUpdate] = useState(false);
 
     useEffect(() => {
         setImages(initImages);
-    }, []);
+    }, [initImages]);
 
     const onImagesChange = (event) => {
         let files = Array.from(event.target.files);
@@ -23,15 +24,6 @@ const EditImagesDialog = (props) => {
             return {
                 file: file,
                 id: file.name + file.lastModified + '',
-                content: (
-                    <div style={{ width: '100%' }}>
-                        <img
-                            src={URL.createObjectURL(file)}
-                            alt="File"
-                            style={{ height: 70 }}
-                        />
-                    </div>
-                ),
             };
         });
         setImages((prevFiles) => {
@@ -41,7 +33,20 @@ const EditImagesDialog = (props) => {
 
     const deleteImage = (id) => {
         setImages((prevImages) => {
-            return prevImages.filter((pi) => pi.id !== id);
+            if (prevImages.find((pi) => pi.id === id).inDB) {
+                return prevImages.map((pi) => {
+                    if (pi.id === id && pi.inDB) {
+                        return {
+                            ...pi,
+                            remove: true,
+                        };
+                    } else {
+                        return pi;
+                    }
+                });
+            } else {
+                return prevImages.filter((pi) => pi.id !== id);
+            }
         });
     };
 
@@ -51,6 +56,7 @@ const EditImagesDialog = (props) => {
             const [reorderedImages] = tmpImages.splice(result.source.index, 1);
             tmpImages.splice(result.destination.index, 0, reorderedImages);
             setImages(tmpImages);
+            setUpdate((prevValue) => !prevValue);
         }
     };
 
@@ -64,13 +70,40 @@ const EditImagesDialog = (props) => {
         setOpen(false);
     };
 
+    const getListItems = () => {
+        let items = [];
+        images.forEach((image) => {
+            if (!image.remove) {
+                let content;
+                if (image.inDB) {
+                    content = getItemContent(`/images/${image.image_name}`);
+                } else {
+                    content = getItemContent(URL.createObjectURL(image.file));
+                }
+                items.push({
+                    ...image,
+                    content: content,
+                });
+            }
+        });
+        return items;
+    };
+
+    const getItemContent = (src) => {
+        return (
+            <div style={{ width: '100%' }}>
+                <img src={src} alt="File" style={{ height: 70 }} />
+            </div>
+        );
+    };
+
     return (
         <Dialog onClose={cancel} open={open} fullWidth maxWidth="sm">
             <DialogTitle>Edit images</DialogTitle>
             <DialogContent>
                 <DragDropList
                     id="droppableImages"
-                    items={images}
+                    items={getListItems()}
                     onReorder={reorderImages}
                     onRemove={deleteImage}
                 />
@@ -86,7 +119,7 @@ const EditImagesDialog = (props) => {
                         onChange={onImagesChange}
                     />
                     <Button variant="outlined" color="primary" component="span">
-                        Choose images
+                        Choose
                     </Button>
                 </label>
                 <Button color="secondary" onClick={cancel}>

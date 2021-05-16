@@ -61,11 +61,26 @@ const CreateProjectView = (props) => {
 
     const submitImages = (projectId, images) => {
         let promises = [];
+        let place = 1;
         images.forEach((image) => {
-            const formData = new FormData();
-            formData.append('file', image.file);
-            formData.set('project_id', projectId);
-            promises.push(projectImageApi.addProjectImage(formData));
+            if (image.inDB && image.remove) {
+                promises.push(projectImageApi.removeProjectImage(image.id));
+            } else if (image.inDB) {
+                promises.push(
+                    projectImageApi.editProjectImage({
+                        id: image.id,
+                        place: place,
+                    })
+                );
+                place++;
+            } else {
+                const formData = new FormData();
+                formData.append('file', image.file);
+                formData.set('place', place);
+                formData.set('project_id', projectId);
+                promises.push(projectImageApi.addProjectImage(formData));
+                place++;
+            }
         });
         return Promise.all(promises);
     };

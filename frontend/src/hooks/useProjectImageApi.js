@@ -9,6 +9,18 @@ const useProjectImageApi = () => {
         return axios.post('/api/project-images', values, getConfig());
     };
 
+    const editProjectImage = (values) => {
+        return axios.put(
+            `/api/project-images/${values.id}`,
+            values,
+            getTokenConfig()
+        );
+    };
+
+    const removeProjectImage = (id) => {
+        return axios.delete(`/api/project-images/${id}`, getTokenConfig());
+    };
+
     const getConfig = () => {
         let token = userContext.user.token;
         const config = {
@@ -20,8 +32,18 @@ const useProjectImageApi = () => {
         return config;
     };
 
+    const getTokenConfig = () => {
+        let token = userContext.user.token;
+        const config = {
+            headers: { Authorization: `bearer ${token}` },
+        };
+        return config;
+    };
+
     return {
         addProjectImage,
+        editProjectImage,
+        removeProjectImage,
     };
 };
 

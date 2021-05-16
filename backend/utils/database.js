@@ -63,6 +63,7 @@ client
             CREATE TABLE IF NOT EXISTS project_images (
                 id SERIAL PRIMARY KEY,
                 image_name VARCHAR(255) NOT NULL,
+                place INTEGER NOT NULL,
                 project_id INT NOT NULL,
                 CONSTRAINT fk_project
                     FOREIGN KEY(project_id)
