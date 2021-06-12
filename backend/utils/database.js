@@ -39,7 +39,8 @@ client
                 id SERIAL PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
                 text VARCHAR(3000) NOT NULL,
-                place INTEGER NOT NULL
+                place INTEGER NOT NULL,
+                orientation VARCHAR(255) NOT NULL
             );
             `
         );

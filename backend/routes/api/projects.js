@@ -6,7 +6,7 @@ router.get('/', (request, response) => {
     database
         .query(
             `
-            SELECT p.id, p.title, p.text, COALESCE(i.images, '[]') AS images, COALESCE(t.tags, '[]') AS tags
+            SELECT p.id, p.title, p.text, p.orientation, COALESCE(i.images, '[]') AS images, COALESCE(t.tags, '[]') AS tags
             FROM projects AS p
             LEFT JOIN (
                 SELECT pi.project_id AS id, json_agg(json_build_object(
@@ -40,7 +40,7 @@ router.get('/:id', (request, response) => {
     database
         .query(
             `
-            SELECT p.id, p.title, p.text, p.place, COALESCE(i.images, '[]') AS images, COALESCE(t.tags, '[]') AS tags
+            SELECT p.id, p.title, p.text, p.place, p.orientation, COALESCE(i.images, '[]') AS images, COALESCE(t.tags, '[]') AS tags
             FROM projects AS p
             LEFT JOIN (
                 SELECT pi.project_id AS id, json_agg(json_build_object(
@@ -99,11 +99,11 @@ router.post('/', (request, response) => {
     database
         .query(
             `
-            INSERT INTO projects (title, text, place)
-            VALUES($1, $2, $3)
+            INSERT INTO projects (title, text, place, orientation)
+            VALUES($1, $2, $3, $4)
             RETURNING id;
             `,
-            [body.title, body.text, body.place]
+            [body.title, body.text, body.place, body.orientation]
         )
         .then((result) => {
             response.status(200).json({ id: result.rows[0].id });
@@ -122,10 +122,16 @@ router.put('/:id', (request, response) => {
         .query(
             `
             UPDATE projects
-            SET title = $1, text = $2, place = $3
-            WHERE id = $4;
+            SET title = $1, text = $2, place = $3, orientation = $4
+            WHERE id = $5;
             `,
-            [body.title, body.text, body.place, request.params.id]
+            [
+                body.title,
+                body.text,
+                body.place,
+                body.orientation,
+                request.params.id,
+            ]
         )
         .then(() => {
             response.sendStatus(200);

@@ -7,6 +7,7 @@ import {
     Chip,
     Paper,
     Button,
+    ButtonBase,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ViewImagesDialog from '../image/ViewImagesDialog';
@@ -16,23 +17,21 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         marginBottom: theme.spacing(1),
     },
-    image: {
+    imageContainer: {
         float: 'left',
-        borderRadius: theme.spacing(1),
+        width: '50%',
         marginRight: theme.spacing(1.5),
     },
-    imageLandscape: {
-        [theme.breakpoints.down('sm')]: {
+    imageContainerLandscape: {
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
             marginBottom: theme.spacing(1.5),
         },
-        [theme.breakpoints.up('sm')]: {
-            width: '50%',
-            marginBottom: theme.spacing(0),
-        },
     },
-    imagePortrait: {
-        width: '50%',
+    image: {
+        width: '100%',
+        verticalAlign: 'middle',
+        borderRadius: theme.spacing(0.5),
     },
 }));
 
@@ -43,35 +42,26 @@ const ProjectCard = (props) => {
     const [viewImagesDialogOpen, setViewImagesDialogOpen] = useState(false);
 
     const renderMainImage = () => {
-        return (
-            <img
-                src={`/images/${project.images[0].image_name}`}
-                alt="Screenshot from project"
-                className={`${classes.image} ${classes.imageLandscape}`}
-            />
-        );
-        /* switch (project.imageOrientation) {
-            case 'landscape':
-                return (
+        if (project?.images.length > 0) {
+            return (
+                <ButtonBase
+                    focusRipple
+                    onClick={() => setViewImagesDialogOpen(true)}
+                    className={`${classes.imageContainer} ${
+                        project.orientation === 'landscape' &&
+                        classes.imageContainerLandscape
+                    }`}
+                >
                     <img
-                        src={project.imageUrl}
+                        src={`/images/${project.images[0].image_name}`}
                         alt="Screenshot from project"
-                        className={`${classes.image} ${classes.imageLandscape}`}
+                        className={classes.image}
                     />
-                );
-            case 'portrait':
-                return (
-                    <img
-                        src={project.imageUrl}
-                        alt="Screenshot from project"
-                        className={`${classes.image} ${classes.imagePortrait}`}
-                    />
-                );
-            case 'none':
-                return null;
-            default:
-                return null;
-        } */
+                </ButtonBase>
+            );
+        } else {
+            return null;
+        }
     };
 
     const renderTags = () => {
@@ -105,16 +95,6 @@ const ProjectCard = (props) => {
                         <Typography>{project.text}</Typography>
                     </div>
                     <Grid item container justify="flex-end">
-                        <Box mt={1} mr={1}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="small"
-                                onClick={() => setViewImagesDialogOpen(true)}
-                            >
-                                Images
-                            </Button>
-                        </Box>
                         <Box mt={1}>
                             <Link
                                 href={project.githubUrl}

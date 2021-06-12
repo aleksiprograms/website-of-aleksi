@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {
     Grid,
     TextField,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
     Button,
     Chip,
     Typography,
@@ -16,6 +20,7 @@ const ProjectForm = (props) => {
     const [project, setProject] = useState({
         title: '',
         text: '',
+        orientation: 'landscape',
     });
     const [tags, setTags] = useState(allTags);
     const [images, setImages] = useState([]);
@@ -122,6 +127,27 @@ const ProjectForm = (props) => {
                         rows={3}
                         rowsMax={15}
                     />
+                </Grid>
+                <Grid item container>
+                    <FormControl variant="outlined" fullWidth>
+                        <InputLabel>Orientation</InputLabel>
+                        <Select
+                            value={project.orientation}
+                            label="Orientation"
+                            onChange={(event) => {
+                                event.persist();
+                                setProject((prevState) => {
+                                    return {
+                                        ...prevState,
+                                        orientation: event.target.value,
+                                    };
+                                });
+                            }}
+                        >
+                            <MenuItem value="landscape">Landscape</MenuItem>
+                            <MenuItem value="portrait">Portrait</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
                 <Grid item container>
                     {images == null || images?.length === 0 ? (

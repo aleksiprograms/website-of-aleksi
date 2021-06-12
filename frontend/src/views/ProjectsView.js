@@ -31,7 +31,7 @@ const ProjectsView = () => {
             <Grid
                 item
                 xs={12}
-                sm={project.imageOrientation === 'portrait' ? 6 : 12}
+                sm={project.orientation === 'portrait' ? 6 : 12}
                 style={{ flexGrow: 1, height: '100%' }}
             >
                 <ProjectCard key={project.id} project={project} />
