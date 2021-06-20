@@ -19,7 +19,7 @@ router.get('/', (request, response) => {
                 SELECT pt.project_id AS id, json_agg(json_build_object(
                     'name', t.name,
                     'importance', t.importance
-                )) AS tags
+                ) ORDER BY place ASC) AS tags
                 FROM project_tags AS pt
                 JOIN tags AS t ON t.id = pt.tag_id
                 GROUP BY pt.project_id
@@ -56,7 +56,7 @@ router.get('/:id', (request, response) => {
                     'name', t.name,
                     'importance', t.importance,
                     'project_tag_id', pt.id
-                )) AS tags
+                ) ORDER BY place ASC) AS tags
                 FROM project_tags AS pt
                 JOIN tags AS t ON t.id = pt.tag_id
                 GROUP BY pt.project_id

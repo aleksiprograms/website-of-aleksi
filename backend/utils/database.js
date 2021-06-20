@@ -52,7 +52,8 @@ client
             CREATE TABLE IF NOT EXISTS tags (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
-                importance VARCHAR(255) NOT NULL
+                importance VARCHAR(255) NOT NULL,
+                place INTEGER NOT NULL
             );
             `
         );

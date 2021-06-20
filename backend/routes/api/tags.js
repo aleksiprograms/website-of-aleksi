@@ -6,7 +6,7 @@ router.get('/', (request, response) => {
     database
         .query(
             `
-            SELECT * FROM tags ORDER BY importance ASC, id ASC;
+            SELECT * FROM tags ORDER BY place ASC;
             `
         )
         .then((result) => {
@@ -35,6 +35,23 @@ router.get('/:id', (request, response) => {
         });
 });
 
+router.post('/get-max-place', (request, response) => {
+    database
+        .query(
+            `
+            SELECT MAX(place) FROM tags;
+            `
+        )
+        .then((result) => {
+            const { rows } = result;
+            const row = rows[0];
+            response.status(200).json(row);
+        })
+        .catch(() => {
+            response.sendStatus(400);
+        });
+});
+
 router.post('/', (request, response) => {
     if (!authorization.isAuthorized(request, response)) {
         return;
@@ -43,11 +60,11 @@ router.post('/', (request, response) => {
     database
         .query(
             `
-            INSERT INTO tags (name, importance)
-            VALUES($1, $2)
+            INSERT INTO tags (name, importance, place)
+            VALUES($1, $2, $3)
             RETURNING id;
             `,
-            [body.name, body.importance]
+            [body.name, body.importance, body.place]
         )
         .then((result) => {
             response.status(200).json({ id: result.rows[0].id });
@@ -66,10 +83,30 @@ router.put('/:id', (request, response) => {
         .query(
             `
             UPDATE tags
-            SET name = $1, importance = $2
-            WHERE id = $3;
+            SET name = $1, importance = $2, place = $3
+            WHERE id = $4;
             `,
-            [body.name, body.importance, request.params.id]
+            [body.name, body.importance, body.place, request.params.id]
+        )
+        .then(() => {
+            response.sendStatus(200);
+        })
+        .catch(() => {
+            response.sendStatus(400);
+        });
+});
+
+router.delete('/:id', (request, response) => {
+    if (!authorization.isAuthorized(request, response)) {
+        return;
+    }
+    database
+        .query(
+            `
+            DELETE FROM tags
+            WHERE id = $1;
+            `,
+            [request.params.id]
         )
         .then(() => {
             response.sendStatus(200);

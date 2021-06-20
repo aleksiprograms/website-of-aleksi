@@ -44,8 +44,13 @@ const CreateTagDialog = (props) => {
     const onSubmit = () => {
         setLoading(true);
         if (newTag) {
+            let tagToAdd = tag;
             tagApi
-                .addTag(tag)
+                .getMaxPlaceOfTags()
+                .then((result) => {
+                    tagToAdd.place = Number(result.data.max) + 1;
+                    return tagApi.addTag(tagToAdd);
+                })
                 .then(() => {
                     setTag(null);
                     onClose();

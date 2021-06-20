@@ -13,12 +13,20 @@ const useTagApi = () => {
         return axios.get(`/api/tags/${id}`);
     };
 
+    const getMaxPlaceOfTags = () => {
+        return axios.post('/api/tags/get-max-place');
+    };
+
     const addTag = (tag) => {
         return axios.post('/api/tags', tag, getTokenConfig());
     };
 
     const editTag = (tag) => {
         return axios.put(`/api/tags/${tag.id}`, tag, getTokenConfig());
+    };
+
+    const removeTag = (id) => {
+        return axios.delete(`/api/tags/${id}`, getTokenConfig());
     };
 
     const getTokenConfig = () => {
@@ -32,8 +40,10 @@ const useTagApi = () => {
     return {
         getTags,
         getTag,
+        getMaxPlaceOfTags,
         addTag,
         editTag,
+        removeTag,
     };
 };
 
